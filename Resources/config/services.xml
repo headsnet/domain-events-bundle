@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services
+        https://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="headsnet_domain_events.event_subscriber.publisher" class="Headsnet\DomainEventsBundle\EventSubscriber\PublishDomainEventSubscriber" public="false">
+            <argument type="service" id="messenger.bus.event"/>
+            <argument type="service" id="headsnet_domain_events.repository.event_store_doctrine"/>
+            <argument type="service" id="serializer"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="headsnet_domain_events.event_subscriber.persister" class="Headsnet\DomainEventsBundle\Doctrine\EventSubscriber\PersistDomainEventSubscriber" public="false">
+            <argument type="service" id="headsnet_domain_events.repository.event_store_doctrine"/>
+            <tag name="doctrine.event_subscriber" connection="default" priority="10" />
+        </service>
+
+        <service id="headsnet_domain_events.repository.event_store_doctrine" class="Headsnet\DomainEventsBundle\Doctrine\DoctrineEventStore" public="false">
+            <argument type="service" id="doctrine.orm.default_entity_manager"/>
+            <argument type="service" id="serializer"/>
+        </service>
+
+    </services>
+
+</container>

@@ -1,0 +1,32 @@
+{
+  "name": "headsnet/domain-events-bundle",
+  "type": "symfony-bundle",
+  "description": "Integrates domain events into your Symfony application",
+  "keywords": ["bundle", "ddd", "domain event", "observer pattern"],
+  "homepage": "https://github.com/headsnet/domain-event-bundle",
+  "license": "MIT",
+  "support": {
+    "issues": "https://github.com/headsnet/domain-event-bundle/issues"
+  },
+  "require": {
+    "php": ">=7.2",
+    "ext-amqp": "*",
+    "doctrine/orm": "^2.5.11",
+    "doctrine/doctrine-bundle": "~1.0",
+    "symfony/framework-bundle": "^4.2",
+    "symfony/serializer": "^4.2",
+    "symfony/messenger": "^4.2"
+  },
+  "require-dev": {
+  },
+  "suggest": {
+  },
+  "autoload": {
+    "psr-4": {
+      "Headsnet\\DomainEventsBundle\\": ""
+    },
+    "exclude-from-classmap": [
+      "/Tests/"
+    ]
+  }
+}
