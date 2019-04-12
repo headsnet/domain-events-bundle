@@ -13,6 +13,8 @@ declare(strict_types=1);
 namespace Headsnet\DomainEventsBundle\EventSubscriber;
 
 use Headsnet\DomainEventsBundle\Domain\Model\EventStore;
+use Symfony\Component\Console\ConsoleEvents;
+use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\PostResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -52,28 +54,46 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
 	}
 
 	/**
+     * Support publishing events on TERMINATE event of both HttpKernel and Console
+     *
 	 * @return array
 	 */
 	public static function getSubscribedEvents(): array
 	{
 		return [
-			KernelEvents::TERMINATE => 'publishEvents'
+			KernelEvents::TERMINATE => 'publishEventsFromHttp',
+            ConsoleEvents::TERMINATE => 'publishEventsFromConsole'
 		];
 	}
 
 	/**
 	 * @param PostResponseEvent $event
 	 */
-	public function publishEvents(PostResponseEvent $event): void
+	public function publishEventsFromHttp(PostResponseEvent $event): void
 	{
-		foreach ($this->eventStore->allUnpublished() as $event)
-		{
-			$this->eventBus->dispatch(
-				$this->serializer->deserialize($event->getEventBody(), $event->getTypeName(), 'json')
-			);
-
-			$this->eventStore->publish($event);
-		}
+        $this->publish();
 	}
 
+    /**
+     * @param ConsoleTerminateEvent $event
+     */
+    public function publishEventsFromConsole(ConsoleTerminateEvent $event)
+    {
+        $this->publish();
+	}
+
+    /**
+     * Do the actual event publishing
+     */
+    private function publish()
+    {
+        foreach ($this->eventStore->allUnpublished() as $event)
+        {
+            $this->eventBus->dispatch(
+                $this->serializer->deserialize($event->getEventBody(), $event->getTypeName(), 'json')
+            );
+
+            $this->eventStore->publish($event);
+        }
+	}
 }
