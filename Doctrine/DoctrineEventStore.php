@@ -64,7 +64,8 @@ final class DoctrineEventStore implements EventStore
 		);
 
 		$this->em->persist($storedEvent);
-		$this->em->flush();
+		//$this->em->flush(); // Flush is not permitted in lifecycle events!
+        //dump($this->em->getUnitOfWork()); die;
 	}
 
 	/**

@@ -29,19 +29,15 @@ class HeadsnetDomainEventsBundle extends Bundle
 	{
 		parent::build($container);
 
-		$modelDir = realpath(__DIR__.'/Doctrine/Mapping');
-		$mappings = [
-			$modelDir => 'Headsnet\DomainEventsBundle\Domain\Model',
-		];
-
 		if (class_exists(DoctrineOrmMappingsPass::class))
 		{
 			$container->addCompilerPass(
 				DoctrineOrmMappingsPass::createXmlMappingDriver(
-					$mappings,
-					['doctrine.orm.entity_manager'],
+                    [realpath(__DIR__.'/Doctrine/Mapping') => 'Headsnet\DomainEventsBundle\Domain\Model'],
+					[],
 					false
-				));
+				)
+            );
 		}
 	}
 

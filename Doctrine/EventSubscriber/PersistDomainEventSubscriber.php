@@ -84,6 +84,7 @@ class PersistDomainEventSubscriber implements EventSubscriber
 			{
 				$this->eventStore->append($domainEvent);
 			}
+
 			$entity->clearRecordedEvents();
 		}
 	}
