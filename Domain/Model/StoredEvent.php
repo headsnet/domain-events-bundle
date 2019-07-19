@@ -6,7 +6,7 @@ namespace Headsnet\DomainEventsBundle\Domain\Model;
 /**
  * Class
  */
-final class StoredEvent
+class StoredEvent
 {
 	/**
 	 * @var int
