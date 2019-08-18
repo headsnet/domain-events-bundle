@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ This file is part of the Symfony HeadsnetDomainEventsBundle.
+  ~
+  ~ (c) Headstrong Internet Services Ltd 2019
+  ~
+  ~ For the full copyright and license information, please view the LICENSE
+  ~ file that was distributed with this source code.
+  -->
+
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <entity name="Headsnet\DomainEventsBundle\Domain\Model\StoredEvent" table="event">
@@ -6,6 +15,8 @@
         <id name="eventId" type="integer">
             <generator strategy="IDENTITY"/>
         </id>
+
+        <field name="aggregateRoot" length="36"/>
 
         <field name="occurredOn" type="datetime"/>
 
