@@ -85,6 +85,11 @@ final class DoctrineEventStore implements EventStore
 	 */
 	public function allUnpublished(): array
 	{
+        if (false === $this->em->getConnection()->getSchemaManager()->tablesExist(['event']))
+        {
+            return [];
+        }
+
 		$qb = $this->em->createQueryBuilder()
 			->select('e')
 			->from(StoredEvent::class, 'e')
