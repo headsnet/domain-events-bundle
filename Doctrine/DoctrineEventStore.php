@@ -51,22 +51,22 @@ final class DoctrineEventStore implements EventStore
 		$this->serializer = $serializer;
 	}
 
-	/**
-	 * @param DomainEvent $domainEvent
-	 */
-	public function append(DomainEvent $domainEvent)
-	{
-		$storedEvent = new StoredEvent(
-			get_class($domainEvent),
-			\DateTimeImmutable::createFromFormat(DATE_ATOM, $domainEvent->getOccurredOn()),
-			$domainEvent->getAggregateRootId(),
-			$this->serializer->serialize($domainEvent, 'json')
-		);
+    /**
+     * @param DomainEvent $domainEvent
+     */
+    public function append(DomainEvent $domainEvent)
+    {
+        $storedEvent = new StoredEvent(
+            get_class($domainEvent),
+            \DateTimeImmutable::createFromFormat(DATE_ATOM, $domainEvent->getOccurredOn()),
+            $domainEvent->getAggregateRootId(),
+            $this->serializer->serialize($domainEvent, 'json')
+        );
 
-		$this->em->persist($storedEvent);
-		$this->em->flush(); // Flush is not permitted in lifecycle events!
-        //dump($this->em->getUnitOfWork()); die;
-	}
+        $this->em->persist($storedEvent);
+        $classMetadata = $this->em->getClassMetadata(StoredEvent::class);
+        $this->em->getUnitOfWork()->computeChangeSet($classMetadata, $storedEvent);
+    }
 
 	/**
 	 * @param StoredEvent $storedEvent

@@ -14,6 +14,7 @@ namespace Headsnet\DomainEventsBundle\Doctrine\EventSubscriber;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\OnFlushEventArgs;
 use Headsnet\DomainEventsBundle\Domain\Model\ContainsEvents;
 use Headsnet\DomainEventsBundle\Domain\Model\EventStore;
 
@@ -35,58 +36,40 @@ class PersistDomainEventSubscriber implements EventSubscriber
 		$this->eventStore = $eventStore;
 	}
 
-	/**
-	 * @return array
-	 */
-	public function getSubscribedEvents(): array
-	{
-		return [
-			'prePersist',
-			'preUpdate',
-			'preRemove'
-		];
-	}
+    /**
+     * @return array
+     */
+    public function getSubscribedEvents(): array
+    {
+        return [
+            'onFlush'
+        ];
+    }
 
-	/**
-	 * @param LifecycleEventArgs $args
-	 */
-	public function prePersist(LifecycleEventArgs $args): void
-	{
-		$this->persistEntityDomainEvents($args);
-	}
+    /**
+     * @param OnFlushEventArgs $args
+     */
+    public function onFlush(OnFlushEventArgs $args): void
+    {
+        $this->persistEntityDomainEvents($args);
+    }
 
-	/**
-	 * @param LifecycleEventArgs $args
-	 */
-	public function preUpdate(LifecycleEventArgs $args): void
-	{
-		$this->persistEntityDomainEvents($args);
-	}
+    /**
+     * @param OnFlushEventArgs $args
+     */
+    private function persistEntityDomainEvents(OnFlushEventArgs $args)
+    {
+        foreach ($args->getEntityManager()->getUnitOfWork()->getScheduledEntityUpdates() as $entity)
+        {
+            if ($entity instanceof ContainsEvents)
+            {
+                foreach ($entity->getRecordedEvents() as $domainEvent)
+                {
+                    $this->eventStore->append($domainEvent);
+                }
 
-	/**
-	 * @param LifecycleEventArgs $args
-	 */
-	public function preRemove(LifecycleEventArgs $args): void
-	{
-		$this->persistEntityDomainEvents($args);
-	}
-
-	/**
-	 * @param LifecycleEventArgs $args
-	 */
-	private function persistEntityDomainEvents(LifecycleEventArgs $args): void
-	{
-		$entity = $args->getEntity();
-
-		if ($entity instanceof ContainsEvents)
-		{
-			foreach ($entity->getRecordedEvents() as $domainEvent)
-			{
-				$this->eventStore->append($domainEvent);
-			}
-
-			$entity->clearRecordedEvents();
-		}
-	}
-
+                $entity->clearRecordedEvents();
+            }
+        }
+    }
 }
