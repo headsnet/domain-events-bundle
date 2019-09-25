@@ -59,16 +59,29 @@ class PersistDomainEventSubscriber implements EventSubscriber
      */
     private function persistEntityDomainEvents(OnFlushEventArgs $args)
     {
-        foreach ($args->getEntityManager()->getUnitOfWork()->getScheduledEntityUpdates() as $entity)
-        {
-            if ($entity instanceof ContainsEvents)
-            {
-                foreach ($entity->getRecordedEvents() as $domainEvent)
-                {
-                    $this->eventStore->append($domainEvent);
-                }
+        $uow = $args->getEntityManager()->getUnitOfWork();
 
-                $entity->clearRecordedEvents();
+        $sources = [
+            $uow->getScheduledEntityInsertions(),
+            $uow->getScheduledEntityUpdates(),
+            $uow->getScheduledEntityDeletions(),
+            //$uow->getScheduledCollectionDeletions(),
+            //$uow->getScheduledCollectionUpdates()
+        ];
+
+        foreach ($sources as $source)
+        {
+            foreach ($source as $entity)
+            {
+                if ($entity instanceof ContainsEvents)
+                {
+                    foreach ($entity->getRecordedEvents() as $domainEvent)
+                    {
+                        $this->eventStore->append($domainEvent);
+                    }
+
+                    $entity->clearRecordedEvents();
+                }
             }
         }
     }
