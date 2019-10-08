@@ -25,8 +25,6 @@ final class EventId
 
     private function __construct(UuidInterface $id)
     {
-        Assert::uuid($id->toString());
-
         $this->id = $id;
     }
 
