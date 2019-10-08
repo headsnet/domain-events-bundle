@@ -21,9 +21,6 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-/**
- * Class
- */
 final class PublishDomainEventSubscriber implements EventSubscriberInterface
 {
 	/**
@@ -41,11 +38,6 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
 	 */
 	private $serializer;
 
-	/**
-	 * @param MessageBusInterface $eventBus
-	 * @param EventStore          $eventStore
-	 * @param SerializerInterface $serializer
-	 */
 	public function __construct(MessageBusInterface $eventBus, EventStore $eventStore, SerializerInterface $serializer)
 	{
 		$this->eventBus = $eventBus;
@@ -55,8 +47,6 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
 
 	/**
      * Support publishing events on TERMINATE event of both HttpKernel and Console
-     *
-	 * @return array
 	 */
 	public static function getSubscribedEvents(): array
 	{
@@ -66,25 +56,16 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
 		];
 	}
 
-	/**
-	 * @param PostResponseEvent $event
-	 */
 	public function publishEventsFromHttp(PostResponseEvent $event): void
 	{
         $this->publish();
 	}
 
-    /**
-     * @param ConsoleTerminateEvent $event
-     */
     public function publishEventsFromConsole(ConsoleTerminateEvent $event)
     {
         $this->publish();
 	}
 
-    /**
-     * Do the actual event publishing
-     */
     private function publish()
     {
         foreach ($this->eventStore->allUnpublished() as $event)

@@ -1,4 +1,13 @@
 <?php
+/**
+ * This file is part of the Symfony HeadsnetDomainEventsBundle.
+ *
+ * (c) Headstrong Internet Services Ltd 2019
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Headsnet\DomainEventsBundle\Domain\Model\Traits;
@@ -25,25 +34,16 @@ trait DomainEventTrait
 	 */
 	private $actorId;
 
-	/**
-	 * @return string
-	 */
 	public function getAggregateRootId(): string
 	{
 		return $this->aggregateRootId;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getOccurredOn(): string
 	{
 		return $this->occurredOn;
 	}
 
-	/**
-	 * @return string|null
-	 */
 	public function getActorId(): ?string
 	{
 		return $this->actorId;

@@ -19,19 +19,10 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 interface EventStore
 {
-    /**
-     * {@inheritdoc}
-     */
     public function nextIdentity(): EventId;
 
-	/**
-	 * @param DomainEvent $domainEvent
-	 */
 	public function append(DomainEvent $domainEvent);
 
-	/**
-	 * @param StoredEvent $domainEvent
-	 */
 	public function publish(StoredEvent $domainEvent);
 
 	/**
