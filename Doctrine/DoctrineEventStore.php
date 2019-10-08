@@ -16,13 +16,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Headsnet\DomainEventsBundle\Domain\Model\DomainEvent;
+use Headsnet\DomainEventsBundle\Domain\Model\EventId;
 use Headsnet\DomainEventsBundle\Domain\Model\EventStore;
 use Headsnet\DomainEventsBundle\Domain\Model\StoredEvent;
 use Symfony\Component\Serializer\SerializerInterface;
 
-/**
- * Class
- */
 final class DoctrineEventStore implements EventStore
 {
 	/**
@@ -40,10 +38,6 @@ final class DoctrineEventStore implements EventStore
 	 */
 	private $serializer;
 
-	/**
-	 * @param EntityManagerInterface $entityManager
-	 * @param SerializerInterface    $serializer
-	 */
 	public function __construct(EntityManagerInterface $entityManager, SerializerInterface $serializer)
 	{
 		$this->em = $entityManager;
@@ -52,11 +46,20 @@ final class DoctrineEventStore implements EventStore
 	}
 
     /**
-     * @param DomainEvent $domainEvent
+     * @throws \Exception
+     */
+    public function nextIdentity(): EventId
+    {
+        return EventId::fromUuid(Uuid::uuid4());
+    }
+
+    /**
+     * @throws \Exception
      */
     public function append(DomainEvent $domainEvent)
     {
         $storedEvent = new StoredEvent(
+            $this->nextIdentity(),
             get_class($domainEvent),
             \DateTimeImmutable::createFromFormat(DATE_ATOM, $domainEvent->getOccurredOn()),
             $domainEvent->getAggregateRootId(),
@@ -69,8 +72,6 @@ final class DoctrineEventStore implements EventStore
     }
 
 	/**
-	 * @param StoredEvent $storedEvent
-	 *
 	 * @throws \Exception
 	 */
 	public function publish(StoredEvent $storedEvent)

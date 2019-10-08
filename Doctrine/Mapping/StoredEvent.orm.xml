@@ -12,8 +12,8 @@
 
     <entity name="Headsnet\DomainEventsBundle\Domain\Model\StoredEvent" table="event">
 
-        <id name="eventId" type="integer">
-            <generator strategy="IDENTITY"/>
+        <id name="eventId" string="36">
+            <generator strategy="NONE"/>
         </id>
 
         <field name="aggregateRoot" length="36"/>
