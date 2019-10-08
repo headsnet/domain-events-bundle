@@ -19,6 +19,7 @@ use Headsnet\DomainEventsBundle\Domain\Model\DomainEvent;
 use Headsnet\DomainEventsBundle\Domain\Model\EventId;
 use Headsnet\DomainEventsBundle\Domain\Model\EventStore;
 use Headsnet\DomainEventsBundle\Domain\Model\StoredEvent;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Serializer\SerializerInterface;
 
 final class DoctrineEventStore implements EventStore
