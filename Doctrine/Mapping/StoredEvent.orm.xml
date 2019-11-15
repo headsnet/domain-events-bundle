@@ -12,7 +12,7 @@
 
     <entity name="Headsnet\DomainEventsBundle\Domain\Model\StoredEvent" table="event">
 
-        <id name="eventId" string="36">
+        <id name="eventId" length="36">
             <generator strategy="NONE"/>
         </id>
 
