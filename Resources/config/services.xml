@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
+<!--
+  ~ This file is part of the Symfony HeadsnetDomainEventsBundle.
+  ~
+  ~ (c) Headstrong Internet Services Ltd 2019
+  ~
+  ~ For the full copyright and license information, please view the LICENSE
+  ~ file that was distributed with this source code.
+  -->
+
 <container xmlns="http://symfony.com/schema/dic/services"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services
@@ -7,10 +16,15 @@
 
     <services>
 
+        <!-- Clients can override this to change the default lock factory, or indeed
+        just configure the default lock using the framework bundle configuration -->
+        <service id="headsnet_domain_events.lock_factory_service" alias="lock.factory"/>
+
         <service id="headsnet_domain_events.event_subscriber.publisher" class="Headsnet\DomainEventsBundle\EventSubscriber\PublishDomainEventSubscriber" public="false">
             <argument type="service" id="messenger.bus.event"/>
             <argument type="service" id="headsnet_domain_events.repository.event_store_doctrine"/>
             <argument type="service" id="serializer"/>
+            <argument type="service" id="headsnet_domain_events.lock_factory_service"/>
             <tag name="kernel.event_subscriber"/>
         </service>
 
