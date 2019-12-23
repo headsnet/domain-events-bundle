@@ -58,6 +58,12 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
 
 	public function publishEventsFromHttp(PostResponseEvent $event): void
 	{
+	    // Poor mans fix to avoid race conditions. To be replaced by the symfony/lock component
+        if ($event->getRequest()->getMethod() == 'GET')
+        {
+            sleep(2);
+        }
+
         $this->publish();
 	}
 

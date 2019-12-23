@@ -14,10 +14,12 @@
     "doctrine/doctrine-bundle": "~1.0",
     "ramsey/uuid-doctrine": "^1.5",
     "symfony/framework-bundle": "^4.2",
+    "symfony/lock": "^4.2",
     "symfony/serializer": "^4.2",
     "symfony/messenger": "^4.2"
   },
   "require-dev": {
+    "symfony/phpunit-bridge": "^5.0"
   },
   "suggest": {
     "ext-amqp": "*"
