@@ -2,7 +2,7 @@
 /**
  * This file is part of the Symfony HeadsnetDomainEventsBundle.
  *
- * (c) Headstrong Internet Services Ltd 2019
+ * (c) Headstrong Internet Services Ltd 2020
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -72,6 +72,25 @@ final class DoctrineEventStore implements EventStore
         $this->em->getUnitOfWork()->computeChangeSet($classMetadata, $storedEvent);
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function replace(DomainEvent $domainEvent)
+    {
+        $previous = $this->repository->findOneBy([
+            'aggregateRoot' => $domainEvent->getAggregateRootId(),
+            'typeName' => get_class($domainEvent),
+            'publishedOn' => null
+        ]);
+
+        if ($previous)
+        {
+            $this->em->remove($previous);
+        }
+
+        $this->append($domainEvent);
+    }
+
 	/**
 	 * @throws \Exception
 	 */
@@ -92,10 +111,18 @@ final class DoctrineEventStore implements EventStore
             return [];
         }
 
+        // Make "now" 1 second in the future, so events for immediate publishing are always published immediately.
+        // This is because Doctrine does not yet support microseconds on DateTime fields
+        // @see https://github.com/doctrine/dbal/issues/2873
+        $now = new \DateTimeImmutable();
+        $now = $now->add(new \DateInterval('PT1S'));
+
 		$qb = $this->em->createQueryBuilder()
 			->select('e')
 			->from(StoredEvent::class, 'e')
 			->where('e.publishedOn IS NULL')
+			->andWhere('e.occurredOn < :now')
+			->setParameter('now', $now)
 			->orderBy('e.eventId');
 
 		return $qb->getQuery()->getResult();

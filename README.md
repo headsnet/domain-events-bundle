@@ -13,7 +13,29 @@ These events are then published using a Symfony event listener in the `kernel.TE
 composer require headsnet/domain-events-bundle
 ```
 
-### Entity Configuration
+### The Domain Event Class
+
+A domain event class must be instantiated with an aggregate root ID. 
+
+You can add other parameters to the constructor as required.
+
+```php
+use Headsnet\DomainEventsBundle\Domain\Model\DomainEvent;
+use Headsnet\DomainEventsBundle\Domain\Model\Traits\DomainEventTrait;
+
+final class DiscountWasApplied implements DomainEvent
+{
+    use DomainEventTrait;
+
+    public function __construct(string $aggregateRootId)
+    {
+        $this->aggregateRootId = $aggregateRootId;
+        $this->occurredOn = (new \DateTimeImmutable)->format(DateTime::ATOM);
+    }
+}
+```
+
+### Recording Events
 
 Domain events should be dispatched from within your domain model - i.e. from directly inside your entities.
 
@@ -35,7 +57,7 @@ class MyEntity implements ContainsEvents, RecordsEvents
     	    
     	    // Record a domain event
     	    $this->record(
-    		    new MyEntityCreated($uuid->asString())
+    		    new DiscountWasApplied($uuid->asString())
     	    );
     	}
 }
@@ -43,6 +65,22 @@ class MyEntity implements ContainsEvents, RecordsEvents
 
 Then, in `kernel.TERMINATE` event, a listener automatically publishes the domain event on to the `messenger.bus.event` 
 event bus for consumption elsewhere.
+
+### Deferring Events Into The Future
+
+If you specify a future date for the `DomainEvent::occurredOn` the event will not be published until this date.
+
+This allows scheduling of tasks directly from within the domain model.
+
+### Replaceable Events (Future)
+
+If an event implements `ReplaceableDomainEvent` instead of `DomainEvent`, recording multiple instances of the same 
+event for the same aggregate root will overwrite previous recordings of the event, as long as it is not yet published.
+
+For example, say you have an aggregate _Booking_, which has a future _ReminderDue_ event. If the booking is then modified 
+to have a different date/time, the reminder must also be modified. By implementing `ReplaceableDomainEvent`, you can 
+simply record a new _ReminderDue_ event, and providing that the previous _ReminderDue_ event had not been published, it will be 
+removed and superseded by the new _ReminderDue_ event. 
 
 ### Messenger Component
 
