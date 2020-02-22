@@ -2,7 +2,7 @@
 <!--
   ~ This file is part of the Symfony HeadsnetDomainEventsBundle.
   ~
-  ~ (c) Headstrong Internet Services Ltd 2019
+  ~ (c) Headstrong Internet Services Ltd 2020
   ~
   ~ For the full copyright and license information, please view the LICENSE
   ~ file that was distributed with this source code.
@@ -18,9 +18,9 @@
 
         <field name="aggregateRoot" length="36"/>
 
-        <field name="occurredOn" type="datetime"/>
+        <field name="occurredOn" type="datetime_immutable_microseconds"/>
 
-        <field name="publishedOn" type="datetime" nullable="true"/>
+        <field name="publishedOn" type="datetime_immutable_microseconds" nullable="true"/>
 
         <field name="typeName" length="255"/>
 
