@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace Headsnet\DomainEventsBundle\Domain\Model\Traits;
 
+use Headsnet\DomainEventsBundle\Domain\Model\DomainEvent;
+
 trait EventRecorderTrait
 {
 	private $messages = [];
@@ -26,7 +28,7 @@ trait EventRecorderTrait
 		$this->messages = [];
 	}
 
-	public function record($message): void
+	public function record(DomainEvent $message): void
 	{
 		$this->messages[] = $message;
 	}

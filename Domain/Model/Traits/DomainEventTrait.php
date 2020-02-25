@@ -20,7 +20,7 @@ trait DomainEventTrait
 	private $aggregateRootId;
 
 	/**
-	 * The datetime the event occurred. Please use Date::ATOM format
+	 * The datetime the event occurred. Please use DomainEvent::MICROSECOND_DATE_FORMAT format
 	 *
 	 * @var string
 	 */
@@ -30,6 +30,11 @@ trait DomainEventTrait
 	 * @var string|null
 	 */
 	private $actorId;
+
+    public function defineActorId(string $actorId): void
+    {
+        $this->actorId = $actorId;
+	}
 
 	public function getAggregateRootId(): string
 	{

@@ -62,7 +62,7 @@ final class DoctrineEventStore implements EventStore
         $storedEvent = new StoredEvent(
             $this->nextIdentity(),
             get_class($domainEvent),
-            \DateTimeImmutable::createFromFormat(DATE_ATOM, $domainEvent->getOccurredOn()),
+            \DateTimeImmutable::createFromFormat(DomainEvent::MICROSECOND_DATE_FORMAT, $domainEvent->getOccurredOn()),
             $domainEvent->getAggregateRootId(),
             $this->serializer->serialize($domainEvent, 'json')
         );

@@ -14,6 +14,9 @@ namespace Headsnet\DomainEventsBundle\Domain\Model;
 
 interface ContainsEvents
 {
+    /**
+     * @return DomainEvent[]
+     */
 	public function getRecordedEvents(): array;
 
 	public function clearRecordedEvents(): void;
