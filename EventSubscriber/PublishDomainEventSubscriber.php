@@ -2,7 +2,7 @@
 /**
  * This file is part of the Symfony HeadsnetDomainEventsBundle.
  *
- * (c) Headstrong Internet Services Ltd 2019
+ * (c) Headstrong Internet Services Ltd 2020
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -87,19 +87,23 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    private function publishEvent(StoredEvent $event): void
+    private function publishEvent(StoredEvent $storedEvent): void
     {
         $lock = $this->lockFactory->createLock(
-            sprintf('domain-event-%s', $event->getEventId()->asString())
+            sprintf('domain-event-%s', $storedEvent->getEventId()->asString())
         );
 
         if ($lock->acquire())
         {
-            $this->eventBus->dispatch(
-                $this->serializer->deserialize($event->getEventBody(), $event->getTypeName(), 'json')
+            $domainEvent = $this->serializer->deserialize(
+                $storedEvent->getEventBody(),
+                $storedEvent->getTypeName(),
+                'json'
             );
 
-            $this->eventStore->publish($event);
+            $this->eventBus->dispatch($domainEvent);
+
+            $this->eventStore->publish($storedEvent);
 
             $lock->release();
         }

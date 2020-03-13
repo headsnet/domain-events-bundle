@@ -25,11 +25,6 @@ class StoredEvent
 	private $occurredOn;
 
 	/**
-	 * @var string
-	 */
-	private $actorId;
-
-	/**
 	 * @var \DateTimeImmutable
 	 */
 	private $publishedOn;
@@ -54,8 +49,7 @@ class StoredEvent
 		string             $typeName,
 		\DateTimeImmutable $occurredOn,
 		string             $rootId,
-		string             $eventBody,
-		?string            $actorId = null
+		string             $eventBody
 	)
 	{
 		$this->eventId = $eventId->asString();
@@ -63,7 +57,6 @@ class StoredEvent
 		$this->occurredOn = $occurredOn;
 		$this->aggregateRoot = $rootId;
 		$this->eventBody = $eventBody;
-		$this->actorId = $actorId;
 	}
 
 	public function getEventId(): EventId
@@ -101,10 +94,5 @@ class StoredEvent
 	public function getEventBody(): string
 	{
 		return $this->eventBody;
-	}
-
-	public function getActorId(): string
-	{
-		return $this->actorId;
 	}
 }

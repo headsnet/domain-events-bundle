@@ -61,22 +61,24 @@ class PersistDomainEventSubscriber implements EventSubscriber
         {
             foreach ($source as $entity)
             {
-                if ($entity instanceof ContainsEvents)
+                if (false === $entity instanceof ContainsEvents)
                 {
-                    foreach ($entity->getRecordedEvents() as $domainEvent)
-                    {
-                        if ($domainEvent instanceof ReplaceableDomainEvent)
-                        {
-                            $this->eventStore->replace($domainEvent);
-                        }
-                        else
-                        {
-                            $this->eventStore->append($domainEvent);
-                        }
-                    }
-
-                    $entity->clearRecordedEvents();
+                    continue;
                 }
+
+                foreach ($entity->getRecordedEvents() as $domainEvent)
+                {
+                    if ($domainEvent instanceof ReplaceableDomainEvent)
+                    {
+                        $this->eventStore->replace($domainEvent);
+                    }
+                    else
+                    {
+                        $this->eventStore->append($domainEvent);
+                    }
+                }
+
+                $entity->clearRecordedEvents();
             }
         }
     }

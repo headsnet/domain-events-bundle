@@ -31,7 +31,7 @@ trait DomainEventTrait
 	 */
 	private $actorId;
 
-    public function defineActorId(string $actorId): void
+    public function setActorId(?string $actorId): void
     {
         $this->actorId = $actorId;
 	}
@@ -50,4 +50,9 @@ trait DomainEventTrait
 	{
 		return $this->actorId;
 	}
+
+    public function hasActorId(): bool
+    {
+        return (bool) $this->actorId;
+    }
 }

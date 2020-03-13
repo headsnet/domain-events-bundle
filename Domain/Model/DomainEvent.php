@@ -17,11 +17,11 @@ interface DomainEvent
     const MICROSECOND_DATE_FORMAT = 'Y-m-d\TH:i:s.uP';
 
     /**
-     * This is the only method allowed to mutate the event class. It allows setting the
+     * This is the only setter allowed to mutate the event class. It allows setting the
      * actorId centrally when persisting the event, instead of having to determine it and
      * then assign it separately for each dispatched event.
      */
-    public function defineActorId(string $actorId): void;
+    public function setActorId(?string $actorId): void;
 
 	/**
 	 * The aggregate root that was affected by this event.
