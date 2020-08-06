@@ -15,6 +15,8 @@ These events are then published using a Symfony event listener in the `kernel.TE
 composer require headsnet/domain-events-bundle
 ```
 
+(see [Messenger Component](#messenger-component) below for prerequisites)
+
 ### The Domain Event Class
 
 A domain event class must be instantiated with an aggregate root ID. 
@@ -86,7 +88,20 @@ removed and superseded by the new _ReminderDue_ event.
 
 ### Messenger Component
 
-The bundle expects an event bus defined as `messenger.bus.event` to be available.
+The bundle expects an event bus defined as `messenger.bus.event` to be available before the package is required.
+
+```yaml
+framework:
+    messenger:
+        …
+
+        buses:
+            messenger.bus.event:
+                # Optional
+                default_middleware: allow_no_handlers
+```
+
+[Symfony Messenger/Multiple Buses](https://symfony.com/doc/current/messenger/multiple_buses.html)
 
 ### Doctrine
 
