@@ -20,22 +20,29 @@ interface DomainEvent
      * This is the only setter allowed to mutate the event class. It allows setting the
      * actorId centrally when persisting the event, instead of having to determine it and
      * then assign it separately for each dispatched event.
+     *
+     * @param string|null $actorId
      */
     public function setActorId(?string $actorId): void;
 
 	/**
 	 * The aggregate root that was affected by this event.
-	 */
+     *
+     * @return string
+     */
 	public function getAggregateRootId(): string;
 
 	/**
 	 * The datetime the event occurred. Please use self::MICROSECOND_DATE_FORMAT format
-	 */
+     *
+     * @return string
+     */
 	public function getOccurredOn(): string;
 
 	/**
 	 * The id of the actor that fired this event. Most usually a user id.
-	 */
+     *
+     * @return string|null
+     */
 	public function getActorId(): ?string;
-
 }

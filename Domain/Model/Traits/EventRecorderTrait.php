@@ -16,8 +16,14 @@ use Headsnet\DomainEventsBundle\Domain\Model\DomainEvent;
 
 trait EventRecorderTrait
 {
+    /**
+     * @var DomainEvent[]
+     */
 	private $messages = [];
 
+    /**
+     * @return array
+     */
 	public function getRecordedEvents(): array
 	{
 		return $this->messages;
@@ -28,9 +34,11 @@ trait EventRecorderTrait
 		$this->messages = [];
 	}
 
+    /**
+     * @param DomainEvent $message
+     */
 	public function record(DomainEvent $message): void
 	{
 		$this->messages[] = $message;
 	}
-
 }

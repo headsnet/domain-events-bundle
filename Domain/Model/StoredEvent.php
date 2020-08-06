@@ -44,6 +44,13 @@ class StoredEvent
 	 */
 	private $eventBody;
 
+    /**
+     * @param EventId $eventId
+     * @param string $typeName
+     * @param \DateTimeImmutable $occurredOn
+     * @param string $rootId
+     * @param string $eventBody
+     */
 	public function __construct(
 	    EventId            $eventId,
 		string             $typeName,
@@ -59,38 +66,60 @@ class StoredEvent
 		$this->eventBody = $eventBody;
 	}
 
+    /**
+     * @return EventId
+     */
 	public function getEventId(): EventId
 	{
 		return EventId::fromString($this->eventId);
 	}
 
+    /**
+     * @return \DateTimeImmutable
+     */
 	public function getOccurredOn(): \DateTimeImmutable
 	{
 		return $this->occurredOn;
 	}
 
+    /**
+     * @return \DateTimeImmutable
+     */
 	public function getPublishedOn(): \DateTimeImmutable
 	{
 		return $this->publishedOn;
 	}
 
-	public function setPublishedOn(\DateTimeImmutable $publishedOn): StoredEvent
+    /**
+     * @param \DateTimeImmutable $publishedOn
+     * @return StoredEvent
+     */
+	public function setPublishedOn(\DateTimeImmutable $publishedOn): self
 	{
 		$this->publishedOn = $publishedOn;
 
 		return $this;
 	}
 
+    /**
+     * @return string
+     */
 	public function getTypeName(): string
 	{
 		return $this->typeName;
 	}
 
+    /**
+     * @return string
+     */
 	public function getAggregateRoot(): string
 	{
 		return $this->aggregateRoot;
 	}
 
+    /**
+     * @return string
+     */
 	public function getEventBody(): string
 	{
 		return $this->eventBody;

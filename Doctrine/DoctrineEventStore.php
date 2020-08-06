@@ -39,6 +39,10 @@ final class DoctrineEventStore implements EventStore
 	 */
 	private $serializer;
 
+    /**
+     * @param EntityManagerInterface $entityManager
+     * @param SerializerInterface $serializer
+     */
 	public function __construct(EntityManagerInterface $entityManager, SerializerInterface $serializer)
 	{
 		$this->em = $entityManager;
@@ -55,9 +59,10 @@ final class DoctrineEventStore implements EventStore
     }
 
     /**
+     * @param DomainEvent $domainEvent
      * @throws \Exception
      */
-    public function append(DomainEvent $domainEvent)
+    public function append(DomainEvent $domainEvent): void
     {
         $storedEvent = new StoredEvent(
             $this->nextIdentity(),
@@ -73,9 +78,10 @@ final class DoctrineEventStore implements EventStore
     }
 
     /**
+     * @param DomainEvent $domainEvent
      * @throws \Exception
      */
-    public function replace(DomainEvent $domainEvent)
+    public function replace(DomainEvent $domainEvent): void
     {
         $previous = $this->repository->findOneBy([
             'aggregateRoot' => $domainEvent->getAggregateRootId(),
@@ -91,11 +97,11 @@ final class DoctrineEventStore implements EventStore
         $this->append($domainEvent);
     }
 
-	/**
-	 * @throws \Exception
-	 */
-	public function publish(StoredEvent $storedEvent)
-	{
+    /**
+     * @param StoredEvent $storedEvent
+     */
+	public function publish(StoredEvent $storedEvent): void
+    {
 		$storedEvent->setPublishedOn(new \DateTimeImmutable());
 		$this->em->persist($storedEvent);
 		$this->em->flush();
@@ -147,5 +153,4 @@ final class DoctrineEventStore implements EventStore
 
 		return $qb->getQuery()->getResult();
 	}*/
-
 }

@@ -45,6 +45,12 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
      */
     private $lockFactory;
 
+    /**
+     * @param MessageBusInterface $eventBus
+     * @param EventStore $eventStore
+     * @param SerializerInterface $serializer
+     * @param LockFactory $lockFactory
+     */
     public function __construct(
         MessageBusInterface $eventBus,
         EventStore $eventStore,
@@ -60,6 +66,8 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
 
     /**
      * Support publishing events on TERMINATE event of both HttpKernel and Console
+     *
+     * @return string[]
      */
     public static function getSubscribedEvents(): array
     {
@@ -69,17 +77,23 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
         ];
     }
 
+    /**
+     * @param PostResponseEvent $event
+     */
     public function publishEventsFromHttp(PostResponseEvent $event): void
     {
         $this->publishEvents();
     }
 
-    public function publishEventsFromConsole(ConsoleTerminateEvent $event)
+    /**
+     * @param ConsoleTerminateEvent $event
+     */
+    public function publishEventsFromConsole(ConsoleTerminateEvent $event): void
     {
         $this->publishEvents();
     }
 
-    private function publishEvents()
+    private function publishEvents(): void
     {
         foreach ($this->eventStore->allUnpublished() as $event)
         {
@@ -87,6 +101,9 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
         }
     }
 
+    /**
+     * @param StoredEvent $storedEvent
+     */
     private function publishEvent(StoredEvent $storedEvent): void
     {
         $lock = $this->lockFactory->createLock(
@@ -102,7 +119,6 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
             );
 
             $this->eventBus->dispatch($domainEvent);
-
             $this->eventStore->publish($storedEvent);
 
             $lock->release();
