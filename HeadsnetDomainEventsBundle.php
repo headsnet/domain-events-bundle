@@ -17,7 +17,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 class HeadsnetDomainEventsBundle extends Bundle
 {
     /**
-     * Here we add a compiler pass to add a Doctrine Mapping for the Money embeddable model
+     * Here we add a compiler pass to add a Doctrine Mapping
      */
     public function build(ContainerBuilder $container): void
     {
