@@ -18,20 +18,21 @@
     "doctrine/orm": "^2.5.11",
     "doctrine/doctrine-bundle": "~1.0",
     "ramsey/uuid-doctrine": "^1.5",
-    "symfony/framework-bundle": "^4.2",
-    "symfony/lock": "^4.2",
-    "symfony/serializer": "^4.2",
-    "symfony/messenger": "^4.2"
+    "symfony/framework-bundle": "^4.4",
+    "symfony/lock": "^4.4",
+    "symfony/serializer": "^4.4",
+    "symfony/messenger": "^4.4"
   },
   "require-dev": {
-    "symfony/phpunit-bridge": "^5.0"
+    "symfony/phpunit-bridge": "^5.0",
+    "symplify/easy-coding-standard": "^8.1"
   },
   "suggest": {
     "ext-amqp": "*"
   },
   "autoload": {
     "psr-4": {
-      "Headsnet\\DomainEventsBundle\\": ""
+      "Headsnet\\DomainEventsBundle\\": "src/"
     },
     "exclude-from-classmap": [
       "/Tests/"

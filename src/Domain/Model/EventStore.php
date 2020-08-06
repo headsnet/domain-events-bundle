@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of the Symfony HeadsnetDomainEventsBundle.
  *
  * (c) Headstrong Internet Services Ltd 2020
