@@ -99,3 +99,8 @@ The `StoredEvent` entity also tracks whether each event has been published to th
 ### TODO
 
 * Allow configuration of event bus name
+
+### Contributing
+
+Contributions are welcome. Please submit pull requests with one fix/feature per PR.
+
