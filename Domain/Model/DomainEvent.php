@@ -25,24 +25,24 @@ interface DomainEvent
      */
     public function setActorId(?string $actorId): void;
 
-	/**
-	 * The aggregate root that was affected by this event.
+    /**
+     * The aggregate root that was affected by this event.
      *
      * @return string
      */
-	public function getAggregateRootId(): string;
+    public function getAggregateRootId(): string;
 
-	/**
-	 * The datetime the event occurred. Please use self::MICROSECOND_DATE_FORMAT format
+    /**
+     * The datetime the event occurred. Please use self::MICROSECOND_DATE_FORMAT format
      *
      * @return string
      */
-	public function getOccurredOn(): string;
+    public function getOccurredOn(): string;
 
-	/**
-	 * The id of the actor that fired this event. Most usually a user id.
+    /**
+     * The id of the actor that fired this event. Most usually a user id.
      *
      * @return string|null
      */
-	public function getActorId(): ?string;
+    public function getActorId(): ?string;
 }

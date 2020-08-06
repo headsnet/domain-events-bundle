@@ -56,8 +56,7 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
         EventStore $eventStore,
         SerializerInterface $serializer,
         LockFactory $lockFactory
-    )
-    {
+    ) {
         $this->eventBus = $eventBus;
         $this->eventStore = $eventStore;
         $this->serializer = $serializer;
@@ -95,8 +94,7 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
 
     private function publishEvents(): void
     {
-        foreach ($this->eventStore->allUnpublished() as $event)
-        {
+        foreach ($this->eventStore->allUnpublished() as $event) {
             $this->publishEvent($event);
         }
     }
@@ -110,8 +108,7 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
             sprintf('domain-event-%s', $storedEvent->getEventId()->asString())
         );
 
-        if ($lock->acquire())
-        {
+        if ($lock->acquire()) {
             $domainEvent = $this->serializer->deserialize(
                 $storedEvent->getEventBody(),
                 $storedEvent->getTypeName(),

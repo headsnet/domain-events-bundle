@@ -19,26 +19,26 @@ trait EventRecorderTrait
     /**
      * @var DomainEvent[]
      */
-	private $messages = [];
+    private $messages = [];
 
     /**
      * @return array
      */
-	public function getRecordedEvents(): array
-	{
-		return $this->messages;
-	}
+    public function getRecordedEvents(): array
+    {
+        return $this->messages;
+    }
 
-	public function clearRecordedEvents(): void
-	{
-		$this->messages = [];
-	}
+    public function clearRecordedEvents(): void
+    {
+        $this->messages = [];
+    }
 
     /**
      * @param DomainEvent $message
      */
-	public function record(DomainEvent $message): void
-	{
-		$this->messages[] = $message;
-	}
+    public function record(DomainEvent $message): void
+    {
+        $this->messages[] = $message;
+    }
 }

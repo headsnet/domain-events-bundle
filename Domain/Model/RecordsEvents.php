@@ -17,5 +17,5 @@ interface RecordsEvents
     /**
      * @param DomainEvent $event
      */
-	public function record(DomainEvent $event): void;
+    public function record(DomainEvent $event): void;
 }

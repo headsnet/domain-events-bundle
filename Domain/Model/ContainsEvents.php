@@ -17,7 +17,7 @@ interface ContainsEvents
     /**
      * @return DomainEvent[]
      */
-	public function getRecordedEvents(): array;
+    public function getRecordedEvents(): array;
 
-	public function clearRecordedEvents(): void;
+    public function clearRecordedEvents(): void;
 }

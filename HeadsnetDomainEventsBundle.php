@@ -21,19 +21,18 @@ class HeadsnetDomainEventsBundle extends Bundle
      *
      * @param ContainerBuilder $container
      */
-	public function build(ContainerBuilder $container): void
-	{
-		parent::build($container);
+    public function build(ContainerBuilder $container): void
+    {
+        parent::build($container);
 
-		if (class_exists(DoctrineOrmMappingsPass::class))
-		{
-			$container->addCompilerPass(
-				DoctrineOrmMappingsPass::createXmlMappingDriver(
-                    [realpath(__DIR__.'/Doctrine/Mapping') => 'Headsnet\DomainEventsBundle\Domain\Model'],
-					[],
-					false
-				)
+        if (class_exists(DoctrineOrmMappingsPass::class)) {
+            $container->addCompilerPass(
+                DoctrineOrmMappingsPass::createXmlMappingDriver(
+                    [realpath(__DIR__ . '/Doctrine/Mapping') => 'Headsnet\DomainEventsBundle\Domain\Model'],
+                    [],
+                    false
+                )
             );
-		}
-	}
+        }
+    }
 }

@@ -25,28 +25,28 @@ interface EventStore
      * @param DomainEvent $domainEvent
      * @return mixed
      */
-	public function append(DomainEvent $domainEvent);
+    public function append(DomainEvent $domainEvent);
 
     /**
      * @param DomainEvent $domainEvent
      * @return mixed
      */
-	public function replace(DomainEvent $domainEvent);
+    public function replace(DomainEvent $domainEvent);
 
     /**
      * @param StoredEvent $domainEvent
      * @return mixed
      */
-	public function publish(StoredEvent $domainEvent);
+    public function publish(StoredEvent $domainEvent);
 
-	/**
-	 * @return StoredEvent[]
-	 */
-	public function allUnpublished(): array;
+    /**
+     * @return StoredEvent[]
+     */
+    public function allUnpublished(): array;
 
-	/**
-	 * @param $eventId
-	 * @return StoredEvent[]|ArrayCollection
-	 */
-	//public function allStoredEventsSince($eventId): ArrayCollection;
+    /**
+     * @param $eventId
+     * @return StoredEvent[]|ArrayCollection
+     */
+    //public function allStoredEventsSince($eventId): ArrayCollection;
 }
