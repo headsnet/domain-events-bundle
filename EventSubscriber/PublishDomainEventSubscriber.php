@@ -45,12 +45,6 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
      */
     private $lockFactory;
 
-    /**
-     * @param MessageBusInterface $eventBus
-     * @param EventStore $eventStore
-     * @param SerializerInterface $serializer
-     * @param LockFactory $lockFactory
-     */
     public function __construct(
         MessageBusInterface $eventBus,
         EventStore $eventStore,
@@ -76,17 +70,11 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param PostResponseEvent $event
-     */
     public function publishEventsFromHttp(PostResponseEvent $event): void
     {
         $this->publishEvents();
     }
 
-    /**
-     * @param ConsoleTerminateEvent $event
-     */
     public function publishEventsFromConsole(ConsoleTerminateEvent $event): void
     {
         $this->publishEvents();
@@ -99,9 +87,6 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    /**
-     * @param StoredEvent $storedEvent
-     */
     private function publishEvent(StoredEvent $storedEvent): void
     {
         $lock = $this->lockFactory->createLock(

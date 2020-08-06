@@ -22,7 +22,7 @@ trait EventRecorderTrait
     private $messages = [];
 
     /**
-     * @return array
+     * @return DomainEvent[]
      */
     public function getRecordedEvents(): array
     {
@@ -34,9 +34,6 @@ trait EventRecorderTrait
         $this->messages = [];
     }
 
-    /**
-     * @param DomainEvent $message
-     */
     public function record(DomainEvent $message): void
     {
         $this->messages[] = $message;

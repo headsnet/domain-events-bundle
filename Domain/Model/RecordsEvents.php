@@ -14,8 +14,5 @@ namespace Headsnet\DomainEventsBundle\Domain\Model;
 
 interface RecordsEvents
 {
-    /**
-     * @param DomainEvent $event
-     */
     public function record(DomainEvent $event): void;
 }

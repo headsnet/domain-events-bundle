@@ -22,52 +22,31 @@ final class EventId
      */
     private $id;
 
-    /**
-     * @param UuidInterface $id
-     */
     private function __construct(UuidInterface $id)
     {
         $this->id = $id;
     }
 
-    /**
-     * @param string $id
-     * @return EventId
-     */
     public static function fromString(string $id): self
     {
         return new self(Uuid::fromString($id));
     }
 
-    /**
-     * @param UuidInterface $uuid
-     * @return EventId
-     */
     public static function fromUuid(UuidInterface $uuid): self
     {
         return new self($uuid);
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->id->toString();
     }
 
-    /**
-     * @return string
-     */
     public function asString(): string
     {
         return $this->id->toString();
     }
 
-    /**
-     * @param EventId $compareWith
-     * @return bool
-     */
     public function equals(self $compareWith): bool
     {
         return $this->id->toString() === $compareWith->id->toString();

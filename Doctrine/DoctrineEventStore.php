@@ -39,10 +39,6 @@ final class DoctrineEventStore implements EventStore
      */
     private $serializer;
 
-    /**
-     * @param EntityManagerInterface $entityManager
-     * @param SerializerInterface $serializer
-     */
     public function __construct(EntityManagerInterface $entityManager, SerializerInterface $serializer)
     {
         $this->em = $entityManager;
@@ -59,7 +55,6 @@ final class DoctrineEventStore implements EventStore
     }
 
     /**
-     * @param DomainEvent $domainEvent
      * @throws \Exception
      */
     public function append(DomainEvent $domainEvent): void
@@ -78,7 +73,6 @@ final class DoctrineEventStore implements EventStore
     }
 
     /**
-     * @param DomainEvent $domainEvent
      * @throws \Exception
      */
     public function replace(DomainEvent $domainEvent): void
@@ -96,9 +90,6 @@ final class DoctrineEventStore implements EventStore
         $this->append($domainEvent);
     }
 
-    /**
-     * @param StoredEvent $storedEvent
-     */
     public function publish(StoredEvent $storedEvent): void
     {
         $storedEvent->setPublishedOn(new \DateTimeImmutable());

@@ -16,28 +16,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 interface EventStore
 {
-    /**
-     * @return EventId
-     */
     public function nextIdentity(): EventId;
 
-    /**
-     * @param DomainEvent $domainEvent
-     * @return mixed
-     */
-    public function append(DomainEvent $domainEvent);
+    public function append(DomainEvent $domainEvent): void;
 
-    /**
-     * @param DomainEvent $domainEvent
-     * @return mixed
-     */
-    public function replace(DomainEvent $domainEvent);
+    public function replace(DomainEvent $domainEvent): void;
 
-    /**
-     * @param StoredEvent $domainEvent
-     * @return mixed
-     */
-    public function publish(StoredEvent $domainEvent);
+    public function publish(StoredEvent $domainEvent): void;
 
     /**
      * @return StoredEvent[]

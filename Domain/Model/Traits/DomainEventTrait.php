@@ -31,41 +31,26 @@ trait DomainEventTrait
      */
     private $actorId;
 
-    /**
-     * @param string|null $actorId
-     */
     public function setActorId(?string $actorId): void
     {
         $this->actorId = $actorId;
     }
 
-    /**
-     * @return string
-     */
     public function getAggregateRootId(): string
     {
         return $this->aggregateRootId;
     }
 
-    /**
-     * @return string
-     */
     public function getOccurredOn(): string
     {
         return $this->occurredOn;
     }
 
-    /**
-     * @return string|null
-     */
     public function getActorId(): ?string
     {
         return $this->actorId;
     }
 
-    /**
-     * @return bool
-     */
     public function hasActorId(): bool
     {
         return (bool)$this->actorId;

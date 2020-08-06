@@ -25,9 +25,6 @@ class PersistDomainEventSubscriber implements EventSubscriber
      */
     private $eventStore;
 
-    /**
-     * @param EventStore $eventStore
-     */
     public function __construct(EventStore $eventStore)
     {
         $this->eventStore = $eventStore;
@@ -43,17 +40,11 @@ class PersistDomainEventSubscriber implements EventSubscriber
         ];
     }
 
-    /**
-     * @param OnFlushEventArgs $args
-     */
     public function onFlush(OnFlushEventArgs $args): void
     {
         $this->persistEntityDomainEvents($args);
     }
 
-    /**
-     * @param OnFlushEventArgs $args
-     */
     private function persistEntityDomainEvents(OnFlushEventArgs $args): void
     {
         $uow = $args->getEntityManager()->getUnitOfWork();

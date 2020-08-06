@@ -18,8 +18,6 @@ class HeadsnetDomainEventsBundle extends Bundle
 {
     /**
      * Here we add a compiler pass to add a Doctrine Mapping for the Money embeddable model
-     *
-     * @param ContainerBuilder $container
      */
     public function build(ContainerBuilder $container): void
     {
