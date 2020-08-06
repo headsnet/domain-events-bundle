@@ -1,5 +1,7 @@
 # Domain Event Bundle
 
+[![Build Status](https://travis-ci.com/headsnet/domain-events-bundle.svg?branch=master)](https://travis-ci.com/headsnet/domain-events-bundle)
+
 DDD Domain Events for Symfony, with a Doctrine based event store.
 
 Based on the Observer pattern, this package allows you to dispatch domain events from 
