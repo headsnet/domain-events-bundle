@@ -14,7 +14,7 @@ namespace Headsnet\DomainEventsBundle\Domain\Model;
 
 interface DomainEvent
 {
-    const MICROSECOND_DATE_FORMAT = 'Y-m-d\TH:i:s.uP';
+    public const MICROSECOND_DATE_FORMAT = 'Y-m-d\TH:i:s.uP';
 
     /**
      * This is the only setter allowed to mutate the event class. It allows setting the
