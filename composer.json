@@ -2,7 +2,12 @@
   "name": "headsnet/domain-events-bundle",
   "type": "symfony-bundle",
   "description": "Integrates domain events into your Symfony application",
-  "keywords": ["bundle", "ddd", "domain event", "observer pattern"],
+  "keywords": [
+    "bundle",
+    "ddd",
+    "domain event",
+    "observer pattern"
+  ],
   "homepage": "https://github.com/headsnet/domain-event-bundle",
   "license": "MIT",
   "support": {

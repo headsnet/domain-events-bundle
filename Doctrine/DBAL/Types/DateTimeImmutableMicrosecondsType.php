@@ -20,15 +20,14 @@ use Doctrine\DBAL\Types\VarDateTimeImmutableType;
 
 class DateTimeImmutableMicrosecondsType extends VarDateTimeImmutableType
 {
-    public function getName()
+    public function getName(): string
     {
         return 'datetime_immutable_microseconds';
     }
 
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform): string
     {
-        if (isset($fieldDeclaration['version']) && $fieldDeclaration['version'] == true)
-        {
+        if (isset($fieldDeclaration['version']) && $fieldDeclaration['version'] == true) {
             return 'TIMESTAMP';
         }
 

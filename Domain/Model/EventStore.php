@@ -18,21 +18,20 @@ interface EventStore
 {
     public function nextIdentity(): EventId;
 
-	public function append(DomainEvent $domainEvent);
+    public function append(DomainEvent $domainEvent): void;
 
-	public function replace(DomainEvent $domainEvent);
+    public function replace(DomainEvent $domainEvent): void;
 
-	public function publish(StoredEvent $domainEvent);
+    public function publish(StoredEvent $domainEvent): void;
 
-	/**
-	 * @return StoredEvent[]
-	 */
-	public function allUnpublished(): array;
+    /**
+     * @return StoredEvent[]
+     */
+    public function allUnpublished(): array;
 
-	/**
-	 * @param $eventId
-	 *
-	 * @return StoredEvent[]|ArrayCollection
-	 */
-	//public function allStoredEventsSince($eventId): ArrayCollection;
+    /**
+     * @param $eventId
+     * @return StoredEvent[]|ArrayCollection
+     */
+    //public function allStoredEventsSince($eventId): ArrayCollection;
 }

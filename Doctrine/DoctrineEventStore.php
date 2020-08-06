@@ -24,27 +24,27 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 final class DoctrineEventStore implements EventStore
 {
-	/**
-	 * @var EntityManagerInterface
-	 */
-	private $em;
+    /**
+     * @var EntityManagerInterface
+     */
+    private $em;
 
-	/**
-	 * @var EntityRepository
-	 */
-	private $repository;
+    /**
+     * @var EntityRepository
+     */
+    private $repository;
 
-	/**
-	 * @var SerializerInterface
-	 */
-	private $serializer;
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
 
-	public function __construct(EntityManagerInterface $entityManager, SerializerInterface $serializer)
-	{
-		$this->em = $entityManager;
-		$this->repository = $entityManager->getRepository(StoredEvent::class);
-		$this->serializer = $serializer;
-	}
+    public function __construct(EntityManagerInterface $entityManager, SerializerInterface $serializer)
+    {
+        $this->em = $entityManager;
+        $this->repository = $entityManager->getRepository(StoredEvent::class);
+        $this->serializer = $serializer;
+    }
 
     /**
      * @throws \Exception
@@ -57,7 +57,7 @@ final class DoctrineEventStore implements EventStore
     /**
      * @throws \Exception
      */
-    public function append(DomainEvent $domainEvent)
+    public function append(DomainEvent $domainEvent): void
     {
         $storedEvent = new StoredEvent(
             $this->nextIdentity(),
@@ -75,7 +75,7 @@ final class DoctrineEventStore implements EventStore
     /**
      * @throws \Exception
      */
-    public function replace(DomainEvent $domainEvent)
+    public function replace(DomainEvent $domainEvent): void
     {
         $previous = $this->repository->findOneBy([
             'aggregateRoot' => $domainEvent->getAggregateRootId(),
@@ -83,31 +83,26 @@ final class DoctrineEventStore implements EventStore
             'publishedOn' => null
         ]);
 
-        if ($previous)
-        {
+        if ($previous) {
             $this->em->remove($previous);
         }
 
         $this->append($domainEvent);
     }
 
-	/**
-	 * @throws \Exception
-	 */
-	public function publish(StoredEvent $storedEvent)
-	{
-		$storedEvent->setPublishedOn(new \DateTimeImmutable());
-		$this->em->persist($storedEvent);
-		$this->em->flush();
-	}
+    public function publish(StoredEvent $storedEvent): void
+    {
+        $storedEvent->setPublishedOn(new \DateTimeImmutable());
+        $this->em->persist($storedEvent);
+        $this->em->flush();
+    }
 
-	/**
-	 * @return StoredEvent[]
-	 */
-	public function allUnpublished(): array
-	{
-        if (false === $this->em->getConnection()->getSchemaManager()->tablesExist(['event']))
-        {
+    /**
+     * @return StoredEvent[]
+     */
+    public function allUnpublished(): array
+    {
+        if (false === $this->em->getConnection()->getSchemaManager()->tablesExist(['event'])) {
             return [];
         }
 
@@ -117,35 +112,34 @@ final class DoctrineEventStore implements EventStore
         $now = new \DateTimeImmutable();
         $now = $now->add(new \DateInterval('PT1S'));
 
-		$qb = $this->em->createQueryBuilder()
-			->select('e')
-			->from(StoredEvent::class, 'e')
-			->where('e.publishedOn IS NULL')
-			->andWhere('e.occurredOn < :now')
-			->setParameter('now', $now)
-			->orderBy('e.eventId');
+        $qb = $this->em->createQueryBuilder()
+            ->select('e')
+            ->from(StoredEvent::class, 'e')
+            ->where('e.publishedOn IS NULL')
+            ->andWhere('e.occurredOn < :now')
+            ->setParameter('now', $now)
+            ->orderBy('e.eventId');
 
-		return $qb->getQuery()->getResult();
-	}
+        return $qb->getQuery()->getResult();
+    }
 
-	/**
-	 * @return StoredEvent[]|ArrayCollection
-	 */
-	/*public function allStoredEventsSince($eventId): ArrayCollection
-	{
-		$qb = $this->em->createQueryBuilder()
-			->select('e')
-			->from(StoredEvent::class, 'e')
-			->orderBy('e.eventId');
+    /**
+     * @return StoredEvent[]|ArrayCollection
+     */
+    /*public function allStoredEventsSince($eventId): ArrayCollection
+    {
+        $qb = $this->em->createQueryBuilder()
+            ->select('e')
+            ->from(StoredEvent::class, 'e')
+            ->orderBy('e.eventId');
 
-		if ($eventId)
-		{
-			$qb
-				->where('se.eventId > :event_id')
-				->setParameter('event_id', $eventId);
-		}
+        if ($eventId)
+        {
+            $qb
+                ->where('se.eventId > :event_id')
+                ->setParameter('event_id', $eventId);
+        }
 
-		return $qb->getQuery()->getResult();
-	}*/
-
+        return $qb->getQuery()->getResult();
+    }*/
 }

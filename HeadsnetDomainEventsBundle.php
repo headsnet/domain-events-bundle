@@ -16,24 +16,21 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class HeadsnetDomainEventsBundle extends Bundle
 {
+    /**
+     * Here we add a compiler pass to add a Doctrine Mapping for the Money embeddable model
+     */
+    public function build(ContainerBuilder $container): void
+    {
+        parent::build($container);
 
-	/**
-	 * Here we add a compiler pass to add a Doctrine Mapping for the Money embeddable model
-	 */
-	public function build(ContainerBuilder $container)
-	{
-		parent::build($container);
-
-		if (class_exists(DoctrineOrmMappingsPass::class))
-		{
-			$container->addCompilerPass(
-				DoctrineOrmMappingsPass::createXmlMappingDriver(
-                    [realpath(__DIR__.'/Doctrine/Mapping') => 'Headsnet\DomainEventsBundle\Domain\Model'],
-					[],
-					false
-				)
+        if (class_exists(DoctrineOrmMappingsPass::class)) {
+            $container->addCompilerPass(
+                DoctrineOrmMappingsPass::createXmlMappingDriver(
+                    [realpath(__DIR__ . '/Doctrine/Mapping') => 'Headsnet\DomainEventsBundle\Domain\Model'],
+                    [],
+                    false
+                )
             );
-		}
-	}
-
+        }
+    }
 }

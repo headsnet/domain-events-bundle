@@ -49,6 +49,6 @@ final class EventId
 
     public function equals(self $compareWith): bool
     {
-        return $this->id->toString() == $compareWith->id->toString();
+        return $this->id->toString() === $compareWith->id->toString();
     }
 }

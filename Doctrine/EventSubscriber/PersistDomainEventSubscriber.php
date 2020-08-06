@@ -20,19 +20,19 @@ use Headsnet\DomainEventsBundle\Domain\Model\ReplaceableDomainEvent;
 
 class PersistDomainEventSubscriber implements EventSubscriber
 {
-	/**
-	 * @var EventStore
-	 */
-	private $eventStore;
+    /**
+     * @var EventStore
+     */
+    private $eventStore;
 
-	/**
-	 * @param EventStore $eventStore
-	 */
-	public function __construct(EventStore $eventStore)
-	{
-		$this->eventStore = $eventStore;
-	}
+    public function __construct(EventStore $eventStore)
+    {
+        $this->eventStore = $eventStore;
+    }
 
+    /**
+     * @return string[]
+     */
     public function getSubscribedEvents(): array
     {
         return [
@@ -45,7 +45,7 @@ class PersistDomainEventSubscriber implements EventSubscriber
         $this->persistEntityDomainEvents($args);
     }
 
-    private function persistEntityDomainEvents(OnFlushEventArgs $args)
+    private function persistEntityDomainEvents(OnFlushEventArgs $args): void
     {
         $uow = $args->getEntityManager()->getUnitOfWork();
 
@@ -57,23 +57,16 @@ class PersistDomainEventSubscriber implements EventSubscriber
             //$uow->getScheduledCollectionUpdates()
         ];
 
-        foreach ($sources as $source)
-        {
-            foreach ($source as $entity)
-            {
-                if (false === $entity instanceof ContainsEvents)
-                {
+        foreach ($sources as $source) {
+            foreach ($source as $entity) {
+                if (false === $entity instanceof ContainsEvents) {
                     continue;
                 }
 
-                foreach ($entity->getRecordedEvents() as $domainEvent)
-                {
-                    if ($domainEvent instanceof ReplaceableDomainEvent)
-                    {
+                foreach ($entity->getRecordedEvents() as $domainEvent) {
+                    if ($domainEvent instanceof ReplaceableDomainEvent) {
                         $this->eventStore->replace($domainEvent);
-                    }
-                    else
-                    {
+                    } else {
                         $this->eventStore->append($domainEvent);
                     }
                 }

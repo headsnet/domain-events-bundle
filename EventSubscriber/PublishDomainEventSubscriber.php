@@ -50,8 +50,7 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
         EventStore $eventStore,
         SerializerInterface $serializer,
         LockFactory $lockFactory
-    )
-    {
+    ) {
         $this->eventBus = $eventBus;
         $this->eventStore = $eventStore;
         $this->serializer = $serializer;
@@ -60,6 +59,8 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
 
     /**
      * Support publishing events on TERMINATE event of both HttpKernel and Console
+     *
+     * @return string[]
      */
     public static function getSubscribedEvents(): array
     {
@@ -74,15 +75,14 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
         $this->publishEvents();
     }
 
-    public function publishEventsFromConsole(ConsoleTerminateEvent $event)
+    public function publishEventsFromConsole(ConsoleTerminateEvent $event): void
     {
         $this->publishEvents();
     }
 
-    private function publishEvents()
+    private function publishEvents(): void
     {
-        foreach ($this->eventStore->allUnpublished() as $event)
-        {
+        foreach ($this->eventStore->allUnpublished() as $event) {
             $this->publishEvent($event);
         }
     }
@@ -93,8 +93,7 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
             sprintf('domain-event-%s', $storedEvent->getEventId()->asString())
         );
 
-        if ($lock->acquire())
-        {
+        if ($lock->acquire()) {
             $domainEvent = $this->serializer->deserialize(
                 $storedEvent->getEventBody(),
                 $storedEvent->getTypeName(),
@@ -102,7 +101,6 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
             );
 
             $this->eventBus->dispatch($domainEvent);
-
             $this->eventStore->publish($storedEvent);
 
             $lock->release();

@@ -14,85 +14,84 @@ namespace Headsnet\DomainEventsBundle\Domain\Model;
 
 class StoredEvent
 {
-	/**
-	 * @var string
-	 */
-	private $eventId;
+    /**
+     * @var string
+     */
+    private $eventId;
 
-	/**
-	 * @var \DateTimeImmutable
-	 */
-	private $occurredOn;
+    /**
+     * @var \DateTimeImmutable
+     */
+    private $occurredOn;
 
-	/**
-	 * @var \DateTimeImmutable
-	 */
-	private $publishedOn;
+    /**
+     * @var \DateTimeImmutable
+     */
+    private $publishedOn;
 
-	/**
-	 * @var string
-	 */
-	private $aggregateRoot;
+    /**
+     * @var string
+     */
+    private $aggregateRoot;
 
-	/**
-	 * @var string
-	 */
-	private $typeName;
+    /**
+     * @var string
+     */
+    private $typeName;
 
-	/**
-	 * @var string
-	 */
-	private $eventBody;
+    /**
+     * @var string
+     */
+    private $eventBody;
 
-	public function __construct(
-	    EventId            $eventId,
-		string             $typeName,
-		\DateTimeImmutable $occurredOn,
-		string             $rootId,
-		string             $eventBody
-	)
-	{
-		$this->eventId = $eventId->asString();
-		$this->typeName = $typeName;
-		$this->occurredOn = $occurredOn;
-		$this->aggregateRoot = $rootId;
-		$this->eventBody = $eventBody;
-	}
+    public function __construct(
+        EventId $eventId,
+        string $typeName,
+        \DateTimeImmutable $occurredOn,
+        string $rootId,
+        string $eventBody
+    ) {
+        $this->eventId = $eventId->asString();
+        $this->typeName = $typeName;
+        $this->occurredOn = $occurredOn;
+        $this->aggregateRoot = $rootId;
+        $this->eventBody = $eventBody;
+    }
 
-	public function getEventId(): EventId
-	{
-		return EventId::fromString($this->eventId);
-	}
+    public function getEventId(): EventId
+    {
+        return EventId::fromString($this->eventId);
+    }
 
-	public function getOccurredOn(): \DateTimeImmutable
-	{
-		return $this->occurredOn;
-	}
+    public function getOccurredOn(): \DateTimeImmutable
+    {
+        return $this->occurredOn;
+    }
 
-	public function getPublishedOn(): \DateTimeImmutable
-	{
-		return $this->publishedOn;
-	}
+    public function getPublishedOn(): \DateTimeImmutable
+    {
+        return $this->publishedOn;
+    }
 
-	public function setPublishedOn(\DateTimeImmutable $publishedOn): StoredEvent
-	{
-		$this->publishedOn = $publishedOn;
+    public function setPublishedOn(\DateTimeImmutable $publishedOn): self
+    {
+        $this->publishedOn = $publishedOn;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function getTypeName(): string
-	{
-		return $this->typeName;
-	}
+    public function getTypeName(): string
+    {
+        return $this->typeName;
+    }
 
-	public function getAggregateRoot(): string
-	{
-		return $this->aggregateRoot;
-	}
+    public function getAggregateRoot(): string
+    {
+        return $this->aggregateRoot;
+    }
 
-	public function getEventBody(): string
-	{
-		return $this->eventBody;
-	}
+    public function getEventBody(): string
+    {
+        return $this->eventBody;
+    }
 }

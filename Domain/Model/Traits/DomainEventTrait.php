@@ -14,45 +14,45 @@ namespace Headsnet\DomainEventsBundle\Domain\Model\Traits;
 
 trait DomainEventTrait
 {
-	/**
-	 * @var string
-	 */
-	private $aggregateRootId;
+    /**
+     * @var string
+     */
+    private $aggregateRootId;
 
-	/**
-	 * The datetime the event occurred. Please use DomainEvent::MICROSECOND_DATE_FORMAT format
-	 *
-	 * @var string
-	 */
-	private $occurredOn;
+    /**
+     * The datetime the event occurred. Please use DomainEvent::MICROSECOND_DATE_FORMAT format
+     *
+     * @var string
+     */
+    private $occurredOn;
 
-	/**
-	 * @var string|null
-	 */
-	private $actorId;
+    /**
+     * @var string|null
+     */
+    private $actorId;
 
     public function setActorId(?string $actorId): void
     {
         $this->actorId = $actorId;
-	}
+    }
 
-	public function getAggregateRootId(): string
-	{
-		return $this->aggregateRootId;
-	}
+    public function getAggregateRootId(): string
+    {
+        return $this->aggregateRootId;
+    }
 
-	public function getOccurredOn(): string
-	{
-		return $this->occurredOn;
-	}
+    public function getOccurredOn(): string
+    {
+        return $this->occurredOn;
+    }
 
-	public function getActorId(): ?string
-	{
-		return $this->actorId;
-	}
+    public function getActorId(): ?string
+    {
+        return $this->actorId;
+    }
 
     public function hasActorId(): bool
     {
-        return (bool) $this->actorId;
+        return (bool)$this->actorId;
     }
 }
