@@ -9,6 +9,8 @@ within your domain model, so that they are persisted in the same transaction as 
 
 These events are then published using a Symfony event listener in the `kernel.TERMINATE` event.
 
+This ensures transactional consistency and guaranteed delivery via the Outbox pattern.
+
 ### Installation
 
 ```bash
