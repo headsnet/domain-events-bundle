@@ -4,12 +4,14 @@
 
 DDD Domain Events for Symfony, with a Doctrine based event store.
 
-Based on the Observer pattern, this package allows you to dispatch domain events from 
+Based on the Observer pattern, this package allows you to dispatch domain events from
 within your domain model, so that they are persisted in the same transaction as your aggregate.
 
 These events are then published using a Symfony event listener in the `kernel.TERMINATE` event.
 
 This ensures transactional consistency and guaranteed delivery via the Outbox pattern.
+
+_Requires Symfony 4.4, or Symfony 5.x_
 
 ### Installation
 
@@ -21,7 +23,7 @@ composer require headsnet/domain-events-bundle
 
 ### The Domain Event Class
 
-A domain event class must be instantiated with an aggregate root ID. 
+A domain event class must be instantiated with an aggregate root ID.
 
 You can add other parameters to the constructor as required.
 
@@ -45,7 +47,7 @@ final class DiscountWasApplied implements DomainEvent
 
 Domain events should be dispatched from within your domain model - i.e. from directly inside your entities.
 
-Here we record a domain event for entity creation. It is then automatically persisted to the Doctrine `event` 
+Here we record a domain event for entity creation. It is then automatically persisted to the Doctrine `event`
 database table in the same database transaction as the main entity is persisted.
 
 ```php
@@ -56,11 +58,11 @@ use Headsnet\DomainEventsBundle\Domain\Model\Traits\EventRecorderTrait;
 class MyEntity implements ContainsEvents, RecordsEvents
 {
 	use EventRecorderTrait;
-	
+
 	public function __construct(PropertyId $uuid)
     	{
     	    $this->uuid = $uuid;
-    	    
+
     	    // Record a domain event
     	    $this->record(
     		    new DiscountWasApplied($uuid->asString())
@@ -69,7 +71,7 @@ class MyEntity implements ContainsEvents, RecordsEvents
 }
 ```
 
-Then, in `kernel.TERMINATE` event, a listener automatically publishes the domain event on to the `messenger.bus.event` 
+Then, in `kernel.TERMINATE` event, a listener automatically publishes the domain event on to the `messenger.bus.event`
 event bus for consumption elsewhere.
 
 ### Deferring Events Into The Future
@@ -80,13 +82,13 @@ This allows scheduling of tasks directly from within the domain model.
 
 ### Replaceable Events (Future)
 
-If an event implements `ReplaceableDomainEvent` instead of `DomainEvent`, recording multiple instances of the same 
+If an event implements `ReplaceableDomainEvent` instead of `DomainEvent`, recording multiple instances of the same
 event for the same aggregate root will overwrite previous recordings of the event, as long as it is not yet published.
 
-For example, say you have an aggregate _Booking_, which has a future _ReminderDue_ event. If the booking is then modified 
-to have a different date/time, the reminder must also be modified. By implementing `ReplaceableDomainEvent`, you can 
-simply record a new _ReminderDue_ event, and providing that the previous _ReminderDue_ event had not been published, it will be 
-removed and superseded by the new _ReminderDue_ event. 
+For example, say you have an aggregate _Booking_, which has a future _ReminderDue_ event. If the booking is then modified
+to have a different date/time, the reminder must also be modified. By implementing `ReplaceableDomainEvent`, you can
+simply record a new _ReminderDue_ event, and providing that the previous _ReminderDue_ event had not been published, it will be
+removed and superseded by the new _ReminderDue_ event.
 
 ### Messenger Component
 
