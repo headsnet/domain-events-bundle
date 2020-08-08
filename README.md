@@ -80,7 +80,7 @@ If you specify a future date for the `DomainEvent::occurredOn` the event will no
 
 This allows scheduling of tasks directly from within the domain model.
 
-### Replaceable Events (Future)
+#### Replaceable Future Events
 
 If an event implements `ReplaceableDomainEvent` instead of `DomainEvent`, recording multiple instances of the same
 event for the same aggregate root will overwrite previous recordings of the event, as long as it is not yet published.
@@ -109,15 +109,16 @@ framework:
 
 ### Doctrine
 
-The bundle will create a database table called `event` to persist the events in before dispatch.
-
-This allows a permanent record of all events raised.
+The bundle will create a database table called `event` to persist the events in before dispatch. This allows a permanent record of all events raised.
 
 The `StoredEvent` entity also tracks whether each event has been published to the bus or not.
+
+Finally, a Doctrine DBAL custom type called `datetime_immutable_microseconds` is automatically registered. This allows the StoredEvent entity to persist events with microsecond accuracy. This ensures that events are published in the exact same order they are recorded.
 
 ### TODO
 
 * Allow configuration of event bus name
+* Allow configuration of event table name
 
 ### Contributing
 
