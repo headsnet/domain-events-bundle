@@ -17,7 +17,7 @@ use Headsnet\DomainEventsBundle\Domain\Model\StoredEvent;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\PostResponseEvent;
+use Symfony\Component\HttpKernel\Event\TerminateEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -70,7 +70,7 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function publishEventsFromHttp(PostResponseEvent $event): void
+    public function publishEventsFromHttp(TerminateEvent $event): void
     {
         $this->publishEvents();
     }
