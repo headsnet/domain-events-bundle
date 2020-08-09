@@ -11,8 +11,6 @@
 namespace Headsnet\DomainEventsBundle;
 
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
-use Doctrine\DBAL\Types\Type;
-use Headsnet\DomainEventsBundle\Doctrine\DBAL\Types\DateTimeImmutableMicrosecondsType;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -25,7 +23,6 @@ class HeadsnetDomainEventsBundle extends Bundle
         parent::build($container);
 
         $this->addDoctrineMapping($container);
-        $this->addDBALCustomType($container);
     }
 
     private function addDoctrineMapping(ContainerBuilder $container): void
@@ -39,21 +36,5 @@ class HeadsnetDomainEventsBundle extends Bundle
                 )
             );
         }
-    }
-
-    private function addDBALCustomType(ContainerBuilder $container): void
-    {
-        if (false === Type::hasType(self::TYPE_NAME))
-        {
-            Type::addType(self::TYPE_NAME, DateTimeImmutableMicrosecondsType::class);
-        }
-
-        $container->loadFromExtension('doctrine', [
-            'dbal' => [
-                'types' => [
-                    self::TYPE_NAME => DateTimeImmutableMicrosecondsType::class
-                ]
-            ]
-        ]);
     }
 }
