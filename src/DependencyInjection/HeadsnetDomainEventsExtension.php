@@ -13,11 +13,12 @@ namespace Headsnet\DomainEventsBundle\DependencyInjection;
 use Headsnet\DomainEventsBundle\Doctrine\DBAL\Types\DateTimeImmutableMicrosecondsType;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Reference;
 
-class HeadsnetDomainEventsExtension implements ExtensionInterface, PrependExtensionInterface
+class HeadsnetDomainEventsExtension extends Extension implements PrependExtensionInterface
 {
     private const DBAL_MICROSECONDS_TYPE = 'datetime_immutable_microseconds';
 
@@ -25,32 +26,35 @@ class HeadsnetDomainEventsExtension implements ExtensionInterface, PrependExtens
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
+
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
+
+        $this->useCustomMessageBusIfSpecified($config, $container);
     }
 
-    public function getNamespace()
+    private function useCustomMessageBusIfSpecified(array $config, ContainerBuilder $container): void
     {
-        // TODO: Implement getNamespace() method.
-    }
-
-    public function getXsdValidationBasePath()
-    {
-        // TODO: Implement getXsdValidationBasePath() method.
-    }
-
-    public function getAlias(): string
-    {
-        return 'headsnet_domain_events';
+        if (isset($config['message_bus']['name'])) {
+            $definition = $container->getDefinition('headsnet_domain_events.event_subscriber.publisher');
+            $definition->replaceArgument(0, new Reference($config['message_bus']['name']));
+        }
     }
 
     public function prepend(ContainerBuilder $container): void
     {
-        $config = array(
+        $this->addCustomDBALType($container);
+    }
+
+    private function addCustomDBALType(ContainerBuilder $container): void
+    {
+        $config = [
             'dbal' => [
                 'types' => [
                     self::DBAL_MICROSECONDS_TYPE => DateTimeImmutableMicrosecondsType::class
                 ]
             ]
-        );
+        ];
 
         $container->prependExtensionConfig('doctrine', $config);
     }
