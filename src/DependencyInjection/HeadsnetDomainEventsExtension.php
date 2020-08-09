@@ -19,6 +19,8 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 class HeadsnetDomainEventsExtension implements ExtensionInterface, PrependExtensionInterface
 {
+    private const DBAL_MICROSECONDS_TYPE = 'datetime_immutable_microseconds';
+
     public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
@@ -45,7 +47,7 @@ class HeadsnetDomainEventsExtension implements ExtensionInterface, PrependExtens
         $config = array(
             'dbal' => [
                 'types' => [
-                    'datetime_immutable_microseconds' => DateTimeImmutableMicrosecondsType::class
+                    self::DBAL_MICROSECONDS_TYPE => DateTimeImmutableMicrosecondsType::class
                 ]
             ]
         );

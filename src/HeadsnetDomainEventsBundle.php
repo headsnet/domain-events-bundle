@@ -16,8 +16,6 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class HeadsnetDomainEventsBundle extends Bundle
 {
-    private const TYPE_NAME = 'datetime_immutable_microseconds';
-
     public function build(ContainerBuilder $container): void
     {
         parent::build($container);
@@ -27,8 +25,7 @@ class HeadsnetDomainEventsBundle extends Bundle
 
     private function addDoctrineMapping(ContainerBuilder $container): void
     {
-        if (class_exists(DoctrineOrmMappingsPass::class))
-        {
+        if (class_exists(DoctrineOrmMappingsPass::class)) {
             $container->addCompilerPass(
                 DoctrineOrmMappingsPass::createXmlMappingDriver(
                     [realpath(__DIR__ . '/Doctrine/Mapping') => 'Headsnet\DomainEventsBundle\Domain\Model'],
