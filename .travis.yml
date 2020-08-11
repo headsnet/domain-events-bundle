@@ -1,12 +1,41 @@
 language: php
+sudo: false
+cache:
+    directories:
+        - $HOME/.composer/cache/files
 
-php:
-  - 7.2
-  - 7.3
-  - 7.4
+env:
+    global:
+        - SYMFONY_DEPRECATIONS_HELPER=weak
+        - PHPUNIT_FLAGS=""
+
+matrix:
+    fast_finish: true
+    include:
+        - php: 7.2
+          env: SYMFONY_REQUIRE=^4
+        - php: 7.2
+          env: SYMFONY_REQUIRE=^5
+        - php: 7.3
+          env: SYMFONY_REQUIRE=^4
+        - php: 7.3
+          env: SYMFONY_REQUIRE=^5
+        - php: 7.4
+          env: SYMFONY_REQUIRE=^4
+        - php: 7.4
+          env: SYMFONY_REQUIRE=^5
+        - php: 7.4
+
+before_install:
+    - composer self-update
 
 install:
+    - composer require symfony/flex --no-update
     - composer install --prefer-source
+    - vendor/bin/simple-phpunit install
 
 script:
-    - php vendor/bin/ecs check --set=psr12 --set=symfony ./src ./tests
+    - composer cs
+    - composer static
+    - composer validate --strict --no-check-lock
+    - vendor/bin/simple-phpunit $PHPUNIT_FLAGS

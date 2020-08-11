@@ -29,7 +29,7 @@ interface DomainEvent
     public function getAggregateRootId(): string;
 
     /**
-     * The datetime the event occurred. Please use self::MICROSECOND_DATE_FORMAT format
+     * The datetime the event occurred. Please use self::MICROSECOND_DATE_FORMAT format.
      */
     public function getOccurredOn(): string;
 

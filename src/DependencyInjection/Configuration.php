@@ -21,6 +21,8 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('headsnet_domain_events');
 
+        // @see https://github.com/phpstan/phpstan/issues/844
+        // @phpstan-ignore-next-line
         $treeBuilder->getRootNode()
             ->children()
                 ->arrayNode('message_bus')
