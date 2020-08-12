@@ -36,7 +36,7 @@ class PersistDomainEventSubscriber implements EventSubscriber
     public function getSubscribedEvents(): array
     {
         return [
-            'onFlush'
+            'onFlush',
         ];
     }
 

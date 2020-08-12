@@ -1,0 +1,15 @@
+
+parameters:
+
+    level: 8
+
+    paths:
+        - src
+        - tests
+
+    excludes_analyse:
+        - tests/bootstrap.php
+
+    bootstrapFiles:
+        - vendor/autoload.php
+        - vendor/bin/.phpunit/phpunit-8.3-0/vendor/autoload.php # Include PHPUnit provided by symfony/phpunit-bridge

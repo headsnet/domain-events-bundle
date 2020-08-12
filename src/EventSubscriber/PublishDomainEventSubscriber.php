@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Headsnet\DomainEventsBundle\EventSubscriber;
 
+use Headsnet\DomainEventsBundle\Domain\Model\DomainEvent;
 use Headsnet\DomainEventsBundle\Domain\Model\EventStore;
 use Headsnet\DomainEventsBundle\Domain\Model\StoredEvent;
 use Symfony\Component\Console\ConsoleEvents;
@@ -58,7 +59,7 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Support publishing events on TERMINATE event of both HttpKernel and Console
+     * Support publishing events on TERMINATE event of both HttpKernel and Console.
      *
      * @return string[]
      */
@@ -66,7 +67,7 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
     {
         return [
             KernelEvents::TERMINATE => 'publishEventsFromHttp',
-            ConsoleEvents::TERMINATE => 'publishEventsFromConsole'
+            ConsoleEvents::TERMINATE => 'publishEventsFromConsole',
         ];
     }
 
@@ -99,6 +100,7 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
                 $storedEvent->getTypeName(),
                 'json'
             );
+            assert($domainEvent instanceof DomainEvent);
 
             $this->eventBus->dispatch($domainEvent);
             $this->eventStore->publish($storedEvent);

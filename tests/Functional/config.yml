@@ -1,0 +1,45 @@
+
+doctrine:
+
+    dbal:
+        default_connection: default
+        connections:
+            default:
+                url: 'sqlite:///:memory:'
+                profiling: true
+                charset: UTF8
+
+    orm:
+        default_entity_manager: default
+        auto_generate_proxy_classes: true
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        auto_mapping: true
+
+
+framework:
+
+    messenger:
+
+        default_bus: messenger.bus.event
+
+        buses:
+            messenger.bus.event:
+                default_middleware: allow_no_handlers
+
+    serializer: ~
+
+
+# Create test aliases for services, so they are not automatically removed from the container.
+services:
+
+    test.headsnet_domain_events.event_subscriber.publisher:
+        alias: headsnet_domain_events.event_subscriber.publisher
+        public: true
+
+    test.headsnet_domain_events.event_subscriber.persister:
+        alias: headsnet_domain_events.event_subscriber.persister
+        public: true
+
+    test.headsnet_domain_events.repository.event_store_doctrine:
+        alias: headsnet_domain_events.repository.event_store_doctrine
+        public: true

@@ -20,7 +20,7 @@ trait DomainEventTrait
     private $aggregateRootId;
 
     /**
-     * The datetime the event occurred. Please use DomainEvent::MICROSECOND_DATE_FORMAT format
+     * The datetime the event occurred. Please use DomainEvent::MICROSECOND_DATE_FORMAT format.
      *
      * @var string
      */
@@ -53,6 +53,6 @@ trait DomainEventTrait
 
     public function hasActorId(): bool
     {
-        return (bool)$this->actorId;
+        return (bool) $this->actorId;
     }
 }

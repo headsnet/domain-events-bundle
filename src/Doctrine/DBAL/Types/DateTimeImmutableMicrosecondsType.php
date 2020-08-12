@@ -27,7 +27,7 @@ class DateTimeImmutableMicrosecondsType extends VarDateTimeImmutableType
 
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform): string
     {
-        if (isset($fieldDeclaration['version']) && $fieldDeclaration['version'] == true) {
+        if (isset($fieldDeclaration['version']) && true == $fieldDeclaration['version']) {
             return 'TIMESTAMP';
         }
 

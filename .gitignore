@@ -1,4 +1,6 @@
-/composer.lock
-/docker-compose.yml
-/phpunit.xml
+composer.lock
+composer.phar
+docker-compose.yml
+tests/_output
 /vendor/
+/var/

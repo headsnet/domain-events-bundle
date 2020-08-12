@@ -22,9 +22,12 @@ class HeadsnetDomainEventsExtension extends Extension implements PrependExtensio
 {
     private const DBAL_MICROSECONDS_TYPE = 'datetime_immutable_microseconds';
 
+    /**
+     * @param array<mixed> $configs
+     */
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
         $configuration = new Configuration();
@@ -33,6 +36,9 @@ class HeadsnetDomainEventsExtension extends Extension implements PrependExtensio
         $this->useCustomMessageBusIfSpecified($config, $container);
     }
 
+    /**
+     * @param array<mixed> $config
+     */
     private function useCustomMessageBusIfSpecified(array $config, ContainerBuilder $container): void
     {
         if (isset($config['message_bus']['name'])) {
@@ -51,9 +57,9 @@ class HeadsnetDomainEventsExtension extends Extension implements PrependExtensio
         $config = [
             'dbal' => [
                 'types' => [
-                    self::DBAL_MICROSECONDS_TYPE => DateTimeImmutableMicrosecondsType::class
-                ]
-            ]
+                    self::DBAL_MICROSECONDS_TYPE => DateTimeImmutableMicrosecondsType::class,
+                ],
+            ],
         ];
 
         $container->prependExtensionConfig('doctrine', $config);

@@ -29,7 +29,7 @@ interface EventStore
      */
     public function allUnpublished(): array;
 
-    /**
+    /*
      * @param $eventId
      * @return StoredEvent[]|ArrayCollection
      */

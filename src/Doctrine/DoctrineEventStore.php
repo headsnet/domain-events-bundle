@@ -12,9 +12,10 @@ declare(strict_types=1);
 
 namespace Headsnet\DomainEventsBundle\Doctrine;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use DateInterval;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Persistence\ObjectRepository;
 use Headsnet\DomainEventsBundle\Domain\Model\DomainEvent;
 use Headsnet\DomainEventsBundle\Domain\Model\EventId;
 use Headsnet\DomainEventsBundle\Domain\Model\EventStore;
@@ -30,7 +31,7 @@ final class DoctrineEventStore implements EventStore
     private $em;
 
     /**
-     * @var EntityRepository
+     * @var ObjectRepository
      */
     private $repository;
 
@@ -46,23 +47,23 @@ final class DoctrineEventStore implements EventStore
         $this->serializer = $serializer;
     }
 
-    /**
-     * @throws \Exception
-     */
     public function nextIdentity(): EventId
     {
         return EventId::fromUuid(Uuid::uuid4());
     }
 
-    /**
-     * @throws \Exception
-     */
     public function append(DomainEvent $domainEvent): void
     {
+        $occurredOn = DateTimeImmutable::createFromFormat(
+            DomainEvent::MICROSECOND_DATE_FORMAT,
+            $domainEvent->getOccurredOn()
+        );
+        assert($occurredOn instanceof DateTimeImmutable);
+
         $storedEvent = new StoredEvent(
             $this->nextIdentity(),
             get_class($domainEvent),
-            \DateTimeImmutable::createFromFormat(DomainEvent::MICROSECOND_DATE_FORMAT, $domainEvent->getOccurredOn()),
+            $occurredOn,
             $domainEvent->getAggregateRootId(),
             $this->serializer->serialize($domainEvent, 'json')
         );
@@ -72,15 +73,12 @@ final class DoctrineEventStore implements EventStore
         $this->em->getUnitOfWork()->computeChangeSet($classMetadata, $storedEvent);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function replace(DomainEvent $domainEvent): void
     {
         $previous = $this->repository->findOneBy([
             'aggregateRoot' => $domainEvent->getAggregateRootId(),
             'typeName' => get_class($domainEvent),
-            'publishedOn' => null
+            'publishedOn' => null,
         ]);
 
         if ($previous) {
@@ -92,7 +90,7 @@ final class DoctrineEventStore implements EventStore
 
     public function publish(StoredEvent $storedEvent): void
     {
-        $storedEvent->setPublishedOn(new \DateTimeImmutable());
+        $storedEvent->setPublishedOn(new DateTimeImmutable());
         $this->em->persist($storedEvent);
         $this->em->flush();
     }
@@ -109,8 +107,8 @@ final class DoctrineEventStore implements EventStore
         // Make "now" 1 second in the future, so events for immediate publishing are always published immediately.
         // This is because Doctrine does not yet support microseconds on DateTime fields
         // @see https://github.com/doctrine/dbal/issues/2873
-        $now = new \DateTimeImmutable();
-        $now = $now->add(new \DateInterval('PT1S'));
+        $now = new DateTimeImmutable();
+        $now = $now->add(new DateInterval('PT1S'));
 
         $qb = $this->em->createQueryBuilder()
             ->select('e')
@@ -123,7 +121,7 @@ final class DoctrineEventStore implements EventStore
         return $qb->getQuery()->getResult();
     }
 
-    /**
+    /*
      * @return StoredEvent[]|ArrayCollection
      */
     /*public function allStoredEventsSince($eventId): ArrayCollection

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ This file is part of the Symfony HeadsnetDomainEventsBundle.
+  ~
+  ~ (c) Headstrong Internet Services Ltd 2020
+  ~
+  ~ For the full copyright and license information, please view the LICENSE
+  ~ file that was distributed with this source code.
+  -->
+
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.1/phpunit.xsd"
+         backupGlobals="false"
+         colors="true"
+         bootstrap="./vendor/autoload.php"
+         cacheResultFile="var/cache/.phpunit.results.cache"
+>
+    <php>
+        <ini name="error_reporting" value="-1" />
+        <ini name="intl.default_locale" value="en" />
+        <ini name="intl.error_level" value="0" />
+        <ini name="memory_limit" value="-1" />
+    </php>
+
+    <testsuites>
+        <testsuite name="Test suite">
+            <directory suffix="Test.php">./tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>./src</directory>
+        </whitelist>
+    </filter>
+
+</phpunit>

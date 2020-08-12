@@ -21,11 +21,13 @@
     "symfony/framework-bundle": "^4.4 || ^5.0",
     "symfony/lock": "^4.4 || ^5.0",
     "symfony/serializer": "^4.4 || ^5.0",
-    "symfony/messenger": "^4.4 || ^5.0"
+    "symfony/messenger": "^4.4 || ^5.0",
+    "symfony/flex": "^1.9"
   },
   "require-dev": {
     "symfony/phpunit-bridge": "^5.0",
-    "symplify/easy-coding-standard": "^8.1"
+    "symplify/easy-coding-standard": "^8.1",
+    "nyholm/symfony-bundle-test": "^1.6"
   },
   "suggest": {
     "ext-amqp": "*"
@@ -33,9 +35,18 @@
   "autoload": {
     "psr-4": {
       "Headsnet\\DomainEventsBundle\\": "src/"
-    },
-    "exclude-from-classmap": [
-      "/Tests/"
-    ]
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Headsnet\\DomainEventsBundle\\": "tests/"
+    }
+  },
+  "scripts": {
+    "cs": "vendor/bin/ecs check --ansi --config=ecs.php",
+    "cs-fix": "vendor/bin/ecs check --ansi --config=ecs.php --fix",
+    "static": "vendor/bin/phpstan analyze --ansi",
+    "test": "vendor/bin/simple-phpunit",
+    "test-coverage": "vendor/bin/simple-phpunit --coverage-html tests/_output/coverage"
   }
 }
