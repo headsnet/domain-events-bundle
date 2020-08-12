@@ -45,7 +45,7 @@
   "scripts": {
     "cs": "vendor/bin/ecs check --ansi --config=ecs.php",
     "cs-fix": "vendor/bin/ecs check --ansi --config=ecs.php --fix",
-    "static": "vendor/bin/phpstan analyze src/ tests/ --ansi --level=8 -a vendor/autoload.php -a vendor/bin/.phpunit/phpunit-8.3-0/vendor/autoload.php",
+    "static": "vendor/bin/phpstan analyze --ansi",
     "test": "vendor/bin/simple-phpunit",
     "test-coverage": "vendor/bin/simple-phpunit --coverage-html tests/_output/coverage"
   }
