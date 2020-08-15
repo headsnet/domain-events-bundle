@@ -20,10 +20,17 @@
         just configure the default lock using the framework bundle configuration -->
         <service id="headsnet_domain_events.lock_factory_service" alias="lock.factory"/>
 
+        <!-- Clients can override this to change the default domain event dispatcher -->
+        <service id="headsnet_domain_events.domain_event_dispatcher_service"
+                 class="Headsnet\DomainEventsBundle\EventSubscriber\NoEnvelopeDomainEventDispatcher"
+                 public="false">
+            <argument type="service" id="messenger.bus.event"/>
+        </service>
+
         <service id="headsnet_domain_events.event_subscriber.publisher"
                  class="Headsnet\DomainEventsBundle\EventSubscriber\PublishDomainEventSubscriber"
                  public="false">
-            <argument type="service" id="messenger.bus.event"/>
+            <argument type="service" id="headsnet_domain_events.domain_event_dispatcher_service"/>
             <argument type="service" id="headsnet_domain_events.repository.event_store_doctrine"/>
             <argument type="service" id="serializer"/>
             <argument type="service" id="headsnet_domain_events.lock_factory_service"/>

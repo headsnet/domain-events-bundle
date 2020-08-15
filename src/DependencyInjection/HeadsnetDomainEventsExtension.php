@@ -42,7 +42,7 @@ class HeadsnetDomainEventsExtension extends Extension implements PrependExtensio
     private function useCustomMessageBusIfSpecified(array $config, ContainerBuilder $container): void
     {
         if (isset($config['message_bus']['name'])) {
-            $definition = $container->getDefinition('headsnet_domain_events.event_subscriber.publisher');
+            $definition = $container->getDefinition('headsnet_domain_events.domain_event_dispatcher_service');
             $definition->replaceArgument(0, new Reference($config['message_bus']['name']));
         }
     }
