@@ -21,8 +21,7 @@
     "symfony/framework-bundle": "^4.4 || ^5.0",
     "symfony/lock": "^4.4 || ^5.0",
     "symfony/serializer": "^4.4 || ^5.0",
-    "symfony/messenger": "^4.4 || ^5.0",
-    "symfony/flex": "^1.9"
+    "symfony/messenger": "^4.4 || ^5.0"
   },
   "require-dev": {
     "symfony/phpunit-bridge": "^5.0",
