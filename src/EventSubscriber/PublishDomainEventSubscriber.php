@@ -21,15 +21,14 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\TerminateEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Lock\LockFactory;
-use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 final class PublishDomainEventSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var MessageBusInterface
+     * @var DomainEventDispatcher
      */
-    private $eventBus;
+    private $domainEventDispatcher;
 
     /**
      * @var EventStore
@@ -47,12 +46,12 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
     private $lockFactory;
 
     public function __construct(
-        MessageBusInterface $eventBus,
+        DomainEventDispatcher $domainEventDispatcher,
         EventStore $eventStore,
         SerializerInterface $serializer,
         LockFactory $lockFactory
     ) {
-        $this->eventBus = $eventBus;
+        $this->domainEventDispatcher = $domainEventDispatcher;
         $this->eventStore = $eventStore;
         $this->serializer = $serializer;
         $this->lockFactory = $lockFactory;
@@ -102,7 +101,7 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
             );
             assert($domainEvent instanceof DomainEvent);
 
-            $this->eventBus->dispatch($domainEvent);
+            $this->domainEventDispatcher->dispatch($domainEvent);
             $this->eventStore->publish($storedEvent);
 
             $lock->release();

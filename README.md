@@ -102,6 +102,51 @@ date/time, the reminder must also be modified. By implementing
 providing that the previous _ReminderDue_ event had not been published, it will
 be removed and superseded by the new _ReminderDue_ event.
 
+### Event dispatching
+
+By default only the DomainEvent is dispatched to the configured event bus.
+
+You can overwrite the default event dispatcher with your own implementation to 
+annotate the message before dispatching it, e.g. to add an envelope with custom stamps.
+
+Example:
+
+```yaml
+services:
+    headsnet_domain_events.domain_event_dispatcher_service:
+        class: App\Infrastructure\DomainEventDispatcher
+```
+
+```php
+class PersonCreated implements DomainEvent, AuditableEvent
+{
+    …
+}
+```
+
+```php
+class DomainEventDispatcher implements \Headsnet\DomainEventsBundle\EventSubscriber\DomainEventDispatcher
+{
+    private MessageBusInterface  $eventBus;
+
+    public function __construct(MessageBusInterface $eventBus)
+    {
+        $this->eventBus = $eventBus;
+    }
+
+    public function dispatch(DomainEvent $event): void
+    {
+        if ($event instanceof AuditableEvent) {
+            $this->eventBus->dispatch(
+                new Envelope($event, [new AuditStamp()])
+            );
+        } else {
+            $this->eventBus->dispatch($event);
+        }
+    }
+}
+```
+
 ### Messenger Component
 
 By default, the bundle expects a message bus called `messenger.bus.event` to be
