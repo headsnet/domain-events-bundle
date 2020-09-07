@@ -53,8 +53,6 @@ class PersistDomainEventSubscriber implements EventSubscriber
             $uow->getScheduledEntityInsertions(),
             $uow->getScheduledEntityUpdates(),
             $uow->getScheduledEntityDeletions(),
-            //$uow->getScheduledCollectionDeletions(),
-            //$uow->getScheduledCollectionUpdates()
         ];
 
         foreach ($sources as $source) {
@@ -63,16 +61,36 @@ class PersistDomainEventSubscriber implements EventSubscriber
                     continue;
                 }
 
-                foreach ($entity->getRecordedEvents() as $domainEvent) {
-                    if ($domainEvent instanceof ReplaceableDomainEvent) {
-                        $this->eventStore->replace($domainEvent);
-                    } else {
-                        $this->eventStore->append($domainEvent);
-                    }
-                }
-
-                $entity->clearRecordedEvents();
+                $this->storeRecordedEvents($entity);
             }
         }
+
+        $collectionSources = [
+            $uow->getScheduledCollectionDeletions(),
+            $uow->getScheduledCollectionUpdates(),
+        ];
+        foreach ($collectionSources as $source) {
+            foreach ($source as $collection) {
+                $entity = $collection->getOwner();
+                if (false === $entity instanceof ContainsEvents) {
+                    continue;
+                }
+
+                $this->storeRecordedEvents($entity);
+            }
+        }
+    }
+
+    private function storeRecordedEvents(ContainsEvents $entity): void
+    {
+        foreach ($entity->getRecordedEvents() as $domainEvent) {
+            if ($domainEvent instanceof ReplaceableDomainEvent) {
+                $this->eventStore->replace($domainEvent);
+            } else {
+                $this->eventStore->append($domainEvent);
+            }
+        }
+
+        $entity->clearRecordedEvents();
     }
 }
