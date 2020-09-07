@@ -116,7 +116,7 @@ final class DoctrineEventStore implements EventStore
             ->where('e.publishedOn IS NULL')
             ->andWhere('e.occurredOn < :now')
             ->setParameter('now', $now)
-            ->orderBy('e.eventId');
+            ->orderBy('e.occurredOn');
 
         return $qb->getQuery()->getResult();
     }
