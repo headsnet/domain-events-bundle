@@ -75,14 +75,14 @@ final class DoctrineEventStore implements EventStore
 
     public function replace(DomainEvent $domainEvent): void
     {
-        $previous = $this->repository->findOneBy([
+        $replaceableEvents = $this->repository->findBy([
             'aggregateRoot' => $domainEvent->getAggregateRootId(),
             'typeName' => get_class($domainEvent),
             'publishedOn' => null,
         ]);
 
-        if ($previous) {
-            $this->em->remove($previous);
+        foreach ($replaceableEvents as $replaceableEvent) {
+            $this->em->remove($replaceableEvent);
         }
 
         $this->append($domainEvent);
