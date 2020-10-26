@@ -84,7 +84,7 @@ event on to the `messenger.bus.event` event bus for consumption elsewhere.
 
 ### Amending domain events
 
-Even though events should be treated as immutable, it might be convinient
+Even though events should be treated as immutable, it might be convenient
 to add or change meta data before adding them to the event store.
 
 Before a domain event is appended to the event store,
@@ -92,7 +92,7 @@ the standard Doctrine event store emits a `PreAppendEvent` Symfony event,
 which can be used e.g. to set the actor ID as in the following example:
 
 ```php
-use App\IdentityAccess\Domain\Entity\User;
+use App\Entity\User;
 use Headsnet\DomainEventsBundle\Doctrine\Event\PreAppendEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Security;
