@@ -7,9 +7,8 @@
 
 DDD Domain Events for Symfony, with a Doctrine based event store.
 
-Based on the Observer pattern, this package allows you to dispatch domain events
-from within your domain model, so that they are persisted in the same
-transaction as your aggregate.
+This package allows you to dispatch domain events from within your domain 
+model, so that they are persisted in the same transaction as your aggregate.
 
 These events are then published using a Symfony event listener in the
 `kernel.TERMINATE` event.
