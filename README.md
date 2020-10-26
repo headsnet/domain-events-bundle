@@ -82,6 +82,50 @@ class MyEntity implements ContainsEvents, RecordsEvents
 Then, in `kernel.TERMINATE` event, a listener automatically publishes the domain
 event on to the `messenger.bus.event` event bus for consumption elsewhere.
 
+### Amending domain events
+
+Even though events should be treated as immutable, it might be convenient
+to add or change meta data before adding them to the event store.
+
+Before a domain event is appended to the event store,
+the standard Doctrine event store emits a `PreAppendEvent` Symfony event,
+which can be used e.g. to set the actor ID as in the following example:
+
+```php
+use App\Entity\User;
+use Headsnet\DomainEventsBundle\Doctrine\Event\PreAppendEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Security\Core\Security;
+
+final class AssignDomainEventUser implements EventSubscriberInterface
+{
+    private Security $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            PreAppendEvent::class => 'onPreAppend'
+        ];
+    }
+
+    public function onPreAppend(PreAppendEvent $event): void
+    {
+        $domainEvent = $event->getDomainEvent();
+        if (null === $domainEvent->getActorId()) {
+            $user = $this->security->getUser();
+            if ($user instanceof User) {
+                $domainEvent->setActorId($user->getId());
+            }
+        }
+    }
+}
+```
+
 ### Deferring Events Into The Future
 
 If you specify a future date for the `DomainEvent::occurredOn` the event will

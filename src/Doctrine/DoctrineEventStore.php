@@ -16,12 +16,14 @@ use DateInterval;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectRepository;
+use Headsnet\DomainEventsBundle\Doctrine\Event\PreAppendEvent;
 use Headsnet\DomainEventsBundle\Domain\Model\DomainEvent;
 use Headsnet\DomainEventsBundle\Domain\Model\EventId;
 use Headsnet\DomainEventsBundle\Domain\Model\EventStore;
 use Headsnet\DomainEventsBundle\Domain\Model\StoredEvent;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final class DoctrineEventStore implements EventStore
 {
@@ -40,11 +42,20 @@ final class DoctrineEventStore implements EventStore
      */
     private $serializer;
 
-    public function __construct(EntityManagerInterface $entityManager, SerializerInterface $serializer)
-    {
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        SerializerInterface $serializer,
+        EventDispatcherInterface $eventDispatcher
+    ) {
         $this->em = $entityManager;
         $this->repository = $entityManager->getRepository(StoredEvent::class);
         $this->serializer = $serializer;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function nextIdentity(): EventId
@@ -59,6 +70,8 @@ final class DoctrineEventStore implements EventStore
             $domainEvent->getOccurredOn()
         );
         assert($occurredOn instanceof DateTimeImmutable);
+
+        $this->eventDispatcher->dispatch(new PreAppendEvent($domainEvent));
 
         $storedEvent = new StoredEvent(
             $this->nextIdentity(),
