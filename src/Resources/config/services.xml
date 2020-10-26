@@ -51,6 +51,8 @@
             <argument type="service" id="serializer"/>
         </service>
 
+        <service id="Headsnet\DomainEventsBundle\Domain\Model\EventStore" alias="headsnet_domain_events.repository.event_store_doctrine"/>
+
     </services>
 
 </container>
