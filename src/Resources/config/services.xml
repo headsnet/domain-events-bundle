@@ -52,6 +52,8 @@
             <argument type="service" id="event_dispatcher"/>
         </service>
 
+        <service id="Headsnet\DomainEventsBundle\Domain\Model\EventStore" alias="headsnet_domain_events.repository.event_store_doctrine"/>
+
     </services>
 
 </container>
