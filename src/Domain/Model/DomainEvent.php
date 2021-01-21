@@ -37,4 +37,6 @@ interface DomainEvent
      * The id of the actor that fired this event. Most usually a user id.
      */
     public function getActorId(): ?string;
+
+    public function hasActorId(): bool;
 }
