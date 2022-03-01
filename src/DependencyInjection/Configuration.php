@@ -32,6 +32,10 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end() // message_bus
+                ->arrayNode('legacy_map')
+                    ->normalizeKeys(false)
+                    ->scalarPrototype()->end()
+                ->end() // legacy_map
             ->end()
         ;
 
