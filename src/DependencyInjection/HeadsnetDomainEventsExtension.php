@@ -23,7 +23,7 @@ class HeadsnetDomainEventsExtension extends Extension implements PrependExtensio
     private const DBAL_MICROSECONDS_TYPE = 'datetime_immutable_microseconds';
 
     /**
-     * @param array<mixed> $configs
+     * @param array<string, array> $configs
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
@@ -33,11 +33,13 @@ class HeadsnetDomainEventsExtension extends Extension implements PrependExtensio
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
+        $container->setParameter('headsnet_domain_events.legacy_map', $config['legacy_map']);
+
         $this->useCustomMessageBusIfSpecified($config, $container);
     }
 
     /**
-     * @param array<mixed> $config
+     * @param array<string, array> $config
      */
     private function useCustomMessageBusIfSpecified(array $config, ContainerBuilder $container): void
     {

@@ -7,7 +7,7 @@
 
 DDD Domain Events for Symfony, with a Doctrine based event store.
 
-This package allows you to dispatch domain events from within your domain 
+This package allows you to dispatch domain events from within your domain
 model, so that they are persisted in the same transaction as your aggregate.
 
 These events are then published using a Symfony event listener in the
@@ -149,7 +149,7 @@ be removed and superseded by the new _ReminderDue_ event.
 
 By default only the DomainEvent is dispatched to the configured event bus.
 
-You can overwrite the default event dispatcher with your own implementation to 
+You can overwrite the default event dispatcher with your own implementation to
 annotate the message before dispatching it, e.g. to add an envelope with custom stamps.
 
 Example:
@@ -224,12 +224,43 @@ automatically registered. This allows the StoredEvent entity to persist events
 with microsecond accuracy. This ensures that events are published in the exact
 same order they are recorded.
 
+### Legacy Events Classes
+
+During refactorings, you may well move or rename event classes. This will
+result in legacy class names being stored in the database.
+
+There is a console command, which will report on these legacy event classes
+that do not match an existing, current class in the codebase (based on the
+Composer autoloading).
+
+```
+bin/console headsnet:domain-events:name-check
+```
+
+You can then define the `legacy_map` configuration parameter, to map old,
+legacy event class names to their new replacements.
+
+```yaml
+headsnet_domain_events:
+    legacy_map:
+        App\Namespace\Event\YourLegacyEvent1: App\Namespace\Event\YourNewEvent1
+        App\Namespace\Event\YourLegacyEvent2: App\Namespace\Event\YourNewEvent2
+```
+
+Then you can re-run the console command with the `--fix` option. This will
+then update the legacy class names in the database with their new references.
+
+There is also a `--delete` option which will remove all legacy events from
+the database if they are not found in the legacy map. **THIS IS A DESTRUCTIVE
+COMMAND PLEASE USE WITH CAUTION.**
+
 ### Default Configuration
 
 ```yaml
 headsnet_domain_events:
     message_bus:
-        name:                 messenger.bus.event
+        name: messenger.bus.event
+    legacy_map: []
 ```
 
 ### Contributing
