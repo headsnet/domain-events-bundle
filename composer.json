@@ -14,7 +14,7 @@
     "issues": "https://github.com/headsnet/domain-event-bundle/issues"
   },
   "require": {
-    "php": ">=7.2",
+    "php": ">=7.4",
     "doctrine/orm": "^2.5",
     "doctrine/doctrine-bundle": "^1.0 || ^2.0",
     "ramsey/uuid-doctrine": "^1.5",
