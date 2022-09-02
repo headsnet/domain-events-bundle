@@ -27,7 +27,8 @@
   "require-dev": {
     "phpunit/phpunit": "^9.5",
     "symplify/easy-coding-standard": "^11.1",
-    "nyholm/symfony-bundle-test": "^2.0"
+    "nyholm/symfony-bundle-test": "^2.0",
+    "phpstan/phpstan": "^1.8"
   },
   "suggest": {
     "ext-amqp": "*"

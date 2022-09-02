@@ -25,9 +25,9 @@ class DateTimeImmutableMicrosecondsType extends VarDateTimeImmutableType
         return 'datetime_immutable_microseconds';
     }
 
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform): string
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
-        if (isset($fieldDeclaration['version']) && true == $fieldDeclaration['version']) {
+        if (isset($column['version']) && $column['version']) {
             return 'TIMESTAMP';
         }
 
@@ -39,10 +39,10 @@ class DateTimeImmutableMicrosecondsType extends VarDateTimeImmutableType
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
-        if (\is_object($value) && $value instanceof \DateTimeImmutable &&
+        if ($value instanceof \DateTimeImmutable &&
             ($platform instanceof PostgreSqlPlatform || $platform instanceof MySQLPlatform)
         ) {
-            $dateTimeFormat = $platform->getDateTimeFormatString();
+            $dateTimeFormat = $platform->getDateTimeFormatString(); // @phpstan-ignore-line
 
             return $value->format("{$dateTimeFormat}.u");
         }

@@ -20,30 +20,22 @@ final class EventNameCheckCommand extends Command
      */
     protected static $defaultDescription = 'Check and/or update legacy event class names stored in the database.';
 
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
+    private EntityManagerInterface $em;
 
     /**
-     * @var array<string, string>
+     * @var array<string, string|null>
      */
-    private $legacyMap;
+    private array $legacyMap;
+
+    private SymfonyStyle $io;
+
+    private bool $deleteUnfixable;
 
     /**
-     * @var SymfonyStyle
+     * @param array<string, string> $legacyMap
      */
-    private $io;
-
-    /**
-     * @var bool
-     */
-    private $deleteUnfixable;
-
-    public function __construct(
-        EntityManagerInterface $em,
-        array $legacyMap
-    ) {
+    public function __construct(EntityManagerInterface $em, array $legacyMap)
+    {
         parent::__construct();
         $this->em = $em;
         $this->legacyMap = $legacyMap;
@@ -91,15 +83,18 @@ final class EventNameCheckCommand extends Command
     private function showDefineLegacyMapErrorMessage(): void
     {
         $this->io->error([
-            "You must define the legacy mappings before you can fix event class names.\n\n".
-            "In headsnet_domain_events.yaml, configure the 'legacy_map' option. E.g.\n\n".
-            "headsnet_domain_events:\n".
-            "  legacy_map:\n".
-            "    App\Namespace\Event\YourLegacyEvent1: App\Namespace\Event\YourNewEvent1\n".
+            "You must define the legacy mappings before you can fix event class names.\n\n" .
+            "In headsnet_domain_events.yaml, configure the 'legacy_map' option. E.g.\n\n" .
+            "headsnet_domain_events:\n" .
+            "  legacy_map:\n" .
+            "    App\Namespace\Event\YourLegacyEvent1: App\Namespace\Event\YourNewEvent1\n" .
             "    App\Namespace\Event\YourLegacyEvent2: App\Namespace\Event\YourNewEvent2\n",
         ]);
     }
 
+    /**
+     * @return array<string>
+     */
     protected function loadEventTypesFromEventStore(): array
     {
         $eventTypes = $this->em->createQueryBuilder()
@@ -114,12 +109,15 @@ final class EventNameCheckCommand extends Command
 
         return array_map(
             function (array $type): string {
-                return  $type['typeName'];
+                return $type['typeName'];
             },
             $eventTypes
         );
     }
 
+    /**
+     * @return array<string>
+     */
     protected function findLegacyEventTypes(): array
     {
         $legacyEvents = [];
@@ -132,6 +130,9 @@ final class EventNameCheckCommand extends Command
         return $legacyEvents;
     }
 
+    /**
+     * @param array<string> $legacyEvents
+     */
     protected function displayLegacyEventsFound(array $legacyEvents): void
     {
         if (count($legacyEvents) > 0) {
@@ -148,6 +149,9 @@ final class EventNameCheckCommand extends Command
         }
     }
 
+    /**
+     * @param array<string> $legacyEvents
+     */
     protected function fixLegacyEvents(array $legacyEvents): void
     {
         array_map(

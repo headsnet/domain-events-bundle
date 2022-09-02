@@ -28,7 +28,7 @@ class HeadsnetDomainEventsBundle extends Bundle
         if (class_exists(DoctrineOrmMappingsPass::class)) {
             $container->addCompilerPass(
                 DoctrineOrmMappingsPass::createXmlMappingDriver(
-                    [realpath(__DIR__.'/Doctrine/Mapping') => 'Headsnet\DomainEventsBundle\Domain\Model'],
+                    [realpath(__DIR__ . '/Doctrine/Mapping') => 'Headsnet\DomainEventsBundle\Domain\Model'],
                     []
                 )
             );

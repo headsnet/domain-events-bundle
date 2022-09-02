@@ -7,11 +7,13 @@ parameters:
         - src
         - tests
 
-    excludes_analyse:
+    excludePaths:
         - tests/bootstrap.php
 
     bootstrapFiles:
         - vendor/autoload.php
-        - vendor/bin/.phpunit/phpunit-8.3-0/vendor/autoload.php # Include PHPUnit provided by symfony/phpunit-bridge
 
     checkGenericClassInNonGenericObjectType: false
+
+    ignoreErrors:
+        - '#Class Doctrine\\DBAL\\Platforms\\PostgreSqlPlatform not found#'
