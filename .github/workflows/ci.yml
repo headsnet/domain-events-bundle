@@ -9,34 +9,31 @@ on:
 jobs:
 
     phpunit:
-        name: PHPUnit
-        runs-on: ubuntu-latest
+        name: PHP ${{ matrix.php }} and Symfony ${{ matrix.symfony }}
+        runs-on: ${{ matrix.operating-system }}
 
         strategy:
             fail-fast: false
             matrix:
-                php-version:
-                    - "7.4"
-                    - "8.0"
-                    - "8.1"
-                dependency-versions:
-                    - "lowest"
-                    - "highest"
+                operating-system: [ ubuntu-latest, windows-latest ]
+                php: [ '7.4', '8.0', '8.1' ]
+                symfony: [ '4.4.*', '5.4.*' ]
 
         steps:
             - name: Checkout
               uses: actions/checkout@v3
 
-            - name: Setup PHP
+            - name: Setup PHP ${{ matrix.php }}
               uses: shivammathur/setup-php@v2
               with:
-                  php-version: ${{ matrix.php-version }}
+                  php-version: ${{ matrix.php }}
+                  tools: flex
                   coverage: none
 
             - name: Install composer dependencies
               uses: "ramsey/composer-install@v2"
-              with:
-                  dependency-versions: ${{ matrix.dependency-versions }}
+              env:
+                  SYMFONY_REQUIRE: ${{ matrix.symfony }}
 
-            - name: Run PHPUnit
+            - name: Run test suite on PHP ${{ matrix.php }} and Symfony ${{ matrix.symfony }}
               run: vendor/bin/phpunit tests
