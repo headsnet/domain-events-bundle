@@ -1,6 +1,6 @@
 # Domain Event Bundle
 
-[![Build Status](https://travis-ci.com/headsnet/domain-events-bundle.svg?branch=master)](https://travis-ci.com/headsnet/domain-events-bundle)
+![Build Status](https://github.com/headsnet/domain-events-bundle/actions/workflows/ci.yml/badge.svg)
 [![Latest Stable Version](https://poser.pugx.org/headsnet/domain-events-bundle/v)](//packagist.org/packages/headsnet/domain-events-bundle)
 [![Total Downloads](https://poser.pugx.org/headsnet/domain-events-bundle/downloads)](//packagist.org/packages/headsnet/domain-events-bundle)
 [![License](https://poser.pugx.org/headsnet/domain-events-bundle/license)](//packagist.org/packages/headsnet/domain-events-bundle)
