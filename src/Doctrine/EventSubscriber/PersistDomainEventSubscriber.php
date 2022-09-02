@@ -14,16 +14,14 @@ namespace Headsnet\DomainEventsBundle\Doctrine\EventSubscriber;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\OnFlushEventArgs;
+use Doctrine\ORM\PersistentCollection;
 use Headsnet\DomainEventsBundle\Domain\Model\ContainsEvents;
 use Headsnet\DomainEventsBundle\Domain\Model\EventStore;
 use Headsnet\DomainEventsBundle\Domain\Model\ReplaceableDomainEvent;
 
 class PersistDomainEventSubscriber implements EventSubscriber
 {
-    /**
-     * @var EventStore
-     */
-    private $eventStore;
+    private EventStore $eventStore;
 
     public function __construct(EventStore $eventStore)
     {
@@ -70,6 +68,7 @@ class PersistDomainEventSubscriber implements EventSubscriber
             $uow->getScheduledCollectionUpdates(),
         ];
         foreach ($collectionSources as $source) {
+            /** @var PersistentCollection $collection */
             foreach ($source as $collection) {
                 $entity = $collection->getOwner();
                 if (false === $entity instanceof ContainsEvents) {

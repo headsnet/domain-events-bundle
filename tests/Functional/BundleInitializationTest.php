@@ -29,11 +29,14 @@ class BundleInitializationTest extends KernelTestCase
         return TestKernel::class;
     }
 
+    /**
+     * @param array<string, string> $options
+     */
     protected static function createKernel(array $options = []): KernelInterface
     {
         /** @var TestKernel $kernel */
         $kernel = parent::createKernel($options);
-        $kernel->addTestConfig(__DIR__.'/config.yml');
+        $kernel->addTestConfig(__DIR__ . '/config.yml');
         $kernel->addTestBundle(FrameworkBundle::class);
         $kernel->addTestBundle(DoctrineBundle::class);
         $kernel->addTestBundle(HeadsnetDomainEventsBundle::class);

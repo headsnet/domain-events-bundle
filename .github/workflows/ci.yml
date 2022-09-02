@@ -9,7 +9,7 @@ on:
 jobs:
 
     phpunit:
-        name: PHP ${{ matrix.php }} and Symfony ${{ matrix.symfony }}
+        name: PHPUnit with PHP ${{ matrix.php }} and Symfony ${{ matrix.symfony }}
         runs-on: ${{ matrix.operating-system }}
 
         strategy:
@@ -35,9 +35,25 @@ jobs:
                   coverage: none
 
             - name: Install composer dependencies
-              uses: "ramsey/composer-install@v2"
+              uses: ramsey/composer-install@v2
               env:
                   SYMFONY_REQUIRE: ${{ matrix.symfony }}
 
             - name: Run test suite on PHP ${{ matrix.php }} and Symfony ${{ matrix.symfony }}
               run: vendor/bin/phpunit tests
+
+    ecs:
+        name: Easy Coding Standard
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: ramsey/composer-install@v2
+            - run: vendor/bin/ecs
+
+    phpstan:
+        name: PHPStan
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: ramsey/composer-install@v2
+            - run: vendor/bin/phpstan
