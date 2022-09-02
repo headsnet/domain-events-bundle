@@ -41,3 +41,20 @@ jobs:
 
             - name: Run test suite on PHP ${{ matrix.php }} and Symfony ${{ matrix.symfony }}
               run: vendor/bin/phpunit tests
+
+    ecs:
+        name: Easy Coding Standard
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - name: Easy Coding Standard Action
+              uses: zingimmick/ecs-action@0.0.6
+
+    phpstan:
+        name: PHPStan
+        runs-on: ubuntu-latest
+        steps:
+            - name: "Checkout"
+              uses: actions/checkout@v3
+            - name: PHPStan
+              uses: docker://oskarstark/phpstan-ga
