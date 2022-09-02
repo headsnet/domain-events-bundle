@@ -17,21 +17,36 @@ use Headsnet\DomainEventsBundle\Doctrine\DoctrineEventStore;
 use Headsnet\DomainEventsBundle\Doctrine\EventSubscriber\PersistDomainEventSubscriber;
 use Headsnet\DomainEventsBundle\EventSubscriber\PublishDomainEventSubscriber;
 use Headsnet\DomainEventsBundle\HeadsnetDomainEventsBundle;
-use Nyholm\BundleTest\BaseBundleTestCase;
-use Nyholm\BundleTest\CompilerPass\PublicServicePass;
+use Nyholm\BundleTest\TestKernel;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\HttpKernel\KernelInterface;
 
-class BundleInitializationTest extends BaseBundleTestCase
+class BundleInitializationTest extends KernelTestCase
 {
-    protected function getBundleClass()
+    protected static function getKernelClass(): string
     {
-        return HeadsnetDomainEventsBundle::class;
+        return TestKernel::class;
     }
 
-    public function test_services_are_instantiated_ok(): void
+    protected static function createKernel(array $options = []): KernelInterface
     {
-        $this->bootCustomKernel();
-        $container = $this->getContainer();
+        /** @var TestKernel $kernel */
+        $kernel = parent::createKernel($options);
+        $kernel->addTestConfig(__DIR__.'/config.yml');
+        $kernel->addTestBundle(FrameworkBundle::class);
+        $kernel->addTestBundle(DoctrineBundle::class);
+        $kernel->addTestBundle(HeadsnetDomainEventsBundle::class);
+        $kernel->handleOptions($options);
+
+        return $kernel;
+    }
+
+    public function testInitBundle(): void
+    {
+        $kernel = self::bootKernel();
+
+        $container = $kernel->getContainer();
 
         $services = [
             'test.headsnet_domain_events.event_subscriber.publisher' => PublishDomainEventSubscriber::class,
@@ -44,19 +59,5 @@ class BundleInitializationTest extends BaseBundleTestCase
             $s = $container->get($id);
             $this->assertInstanceOf($class, $s);
         }
-    }
-
-    private function bootCustomKernel(): void
-    {
-        $kernel = $this->createKernel();
-
-        $kernel->addConfigFile(__DIR__.'/config.yml');
-
-        $this->addCompilerPass(new PublicServicePass('|headsnet_domain_events.*|'));
-
-        $kernel->addBundle(FrameworkBundle::class);
-        $kernel->addBundle(DoctrineBundle::class);
-
-        $this->bootKernel();
     }
 }

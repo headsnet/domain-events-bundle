@@ -25,9 +25,9 @@
     "symfony/event-dispatcher": "^4.4 || ^5.0"
   },
   "require-dev": {
-    "symfony/phpunit-bridge": "^5.0",
-    "symplify/easy-coding-standard": "^8.1",
-    "nyholm/symfony-bundle-test": "^1.6"
+    "phpunit/phpunit": "^9.5",
+    "symplify/easy-coding-standard": "^11.1",
+    "nyholm/symfony-bundle-test": "^2.0"
   },
   "suggest": {
     "ext-amqp": "*"
@@ -48,5 +48,9 @@
     "static": "vendor/bin/phpstan analyze --ansi",
     "test": "vendor/bin/simple-phpunit",
     "test-coverage": "vendor/bin/simple-phpunit --coverage-html tests/_output/coverage"
+  },
+  "config": {
+    "allow-plugins": {
+    }
   }
 }
