@@ -32,6 +32,12 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end() // message_bus
+                ->arrayNode('persistence')
+                    ->children()
+                        ->scalarNode('table_name')
+                        ->end()
+                    ->end()
+                ->end() // persistence
                 ->arrayNode('legacy_map')
                     ->normalizeKeys(false)
                     ->scalarPrototype()->end()

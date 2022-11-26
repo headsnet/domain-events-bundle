@@ -26,29 +26,24 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final class DoctrineEventStore implements EventStore
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
+    private EntityManagerInterface $em;
 
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
+    private SerializerInterface $serializer;
 
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
+    private EventDispatcherInterface $eventDispatcher;
+
+    private string $tableName;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         SerializerInterface $serializer,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        string $tableName
     ) {
         $this->em = $entityManager;
         $this->serializer = $serializer;
         $this->eventDispatcher = $eventDispatcher;
+        $this->tableName = $tableName;
     }
 
     public function nextIdentity(): EventId
@@ -107,7 +102,7 @@ final class DoctrineEventStore implements EventStore
      */
     public function allUnpublished(): array
     {
-        if (false === $this->em->getConnection()->getSchemaManager()->tablesExist(['event'])) {
+        if (false === $this->em->getConnection()->getSchemaManager()->tablesExist([$this->tableName])) {
             return [];
         }
 

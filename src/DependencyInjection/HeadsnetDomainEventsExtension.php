@@ -34,6 +34,7 @@ class HeadsnetDomainEventsExtension extends Extension implements PrependExtensio
         $config = $this->processConfiguration($configuration, $configs);
 
         $container->setParameter('headsnet_domain_events.legacy_map', $config['legacy_map']);
+        $container->setParameter('headsnet_domain_events.table_name', $config['persistence']['table_name'] ?? 'event');
 
         $this->useCustomMessageBusIfSpecified($config, $container);
     }
