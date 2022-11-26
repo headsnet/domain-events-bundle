@@ -212,9 +212,10 @@ framework:
 
 ### Doctrine
 
-The bundle will create a database table called `event` to persist the events in
-before dispatch.
-This allows a permanent record of all events raised.
+The bundle will create a database table called `event` to persist the events
+before dispatch. This allows a permanent record of all events raised.
+
+The database table name can be configured - see *Default Configuration* below.
 
 The `StoredEvent` entity also tracks whether each event has been published to
 the bus or not.
@@ -260,6 +261,8 @@ COMMAND PLEASE USE WITH CAUTION.**
 headsnet_domain_events:
     message_bus:
         name: messenger.bus.event
+    persistence:
+        table_name: event
     legacy_map: []
 ```
 

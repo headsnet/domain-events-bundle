@@ -14,6 +14,7 @@ namespace Headsnet\DomainEventsBundle\Doctrine\EventSubscriber;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\OnFlushEventArgs;
+use Doctrine\ORM\Events;
 use Doctrine\ORM\PersistentCollection;
 use Headsnet\DomainEventsBundle\Domain\Model\ContainsEvents;
 use Headsnet\DomainEventsBundle\Domain\Model\EventStore;
@@ -34,7 +35,7 @@ class PersistDomainEventSubscriber implements EventSubscriber
     public function getSubscribedEvents(): array
     {
         return [
-            'onFlush',
+            Events::onFlush,
         ];
     }
 
