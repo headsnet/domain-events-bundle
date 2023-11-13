@@ -14,7 +14,7 @@ namespace Headsnet\DomainEventsBundle\Doctrine;
 
 use DateInterval;
 use DateTimeImmutable;
-use Doctrine\DBAL\ConnectionException;
+use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\ORM\EntityManagerInterface;
 use Headsnet\DomainEventsBundle\Doctrine\Event\PreAppendEvent;
 use Headsnet\DomainEventsBundle\Domain\Model\DomainEvent;
