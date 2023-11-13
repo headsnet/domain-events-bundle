@@ -14,6 +14,7 @@ namespace Headsnet\DomainEventsBundle\Doctrine;
 
 use DateInterval;
 use DateTimeImmutable;
+use Doctrine\DBAL\ConnectionException;
 use Doctrine\ORM\EntityManagerInterface;
 use Headsnet\DomainEventsBundle\Doctrine\Event\PreAppendEvent;
 use Headsnet\DomainEventsBundle\Domain\Model\DomainEvent;
@@ -102,8 +103,15 @@ final class DoctrineEventStore implements EventStore
      */
     public function allUnpublished(): array
     {
-        if (false === $this->em->getConnection()->getSchemaManager()->tablesExist([$this->tableName])) {
-            return [];
+        try
+        {
+            if (false === $this->em->getConnection()->createSchemaManager()->tablesExist([$this->tableName])) {
+                return []; // Connection does exist, but the events table does not exist.
+            }
+        }
+        catch (ConnectionException $connectionException)
+        {
+            return []; // Connection itself does not exist
         }
 
         // Make "now" 1 second in the future, so events for immediate publishing are always published immediately.
