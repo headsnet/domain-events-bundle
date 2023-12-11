@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace Headsnet\DomainEventsBundle\Domain\Model;
 
-use Doctrine\Common\Collections\ArrayCollection;
-
 interface EventStore
 {
     public function nextIdentity(): EventId;
@@ -22,16 +20,12 @@ interface EventStore
 
     public function replace(DomainEvent $domainEvent): void;
 
-    public function publish(StoredEvent $domainEvent): void;
+    public function publish(StoredEvent $storedEvent): void;
 
     /**
      * @return StoredEvent[]
      */
     public function allUnpublished(): array;
 
-    /*
-     * @param $eventId
-     * @return StoredEvent[]|ArrayCollection
-     */
-    //public function allStoredEventsSince($eventId): ArrayCollection;
+    public function refresh(StoredEvent $storedEvent): void;
 }

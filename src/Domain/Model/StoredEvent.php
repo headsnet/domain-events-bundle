@@ -25,7 +25,7 @@ class StoredEvent
     private $occurredOn;
 
     /**
-     * @var \DateTimeImmutable
+     * @var \DateTimeImmutable|null
      */
     private $publishedOn;
 
@@ -68,7 +68,7 @@ class StoredEvent
         return $this->occurredOn;
     }
 
-    public function getPublishedOn(): \DateTimeImmutable
+    public function getPublishedOn(): ?\DateTimeImmutable
     {
         return $this->publishedOn;
     }

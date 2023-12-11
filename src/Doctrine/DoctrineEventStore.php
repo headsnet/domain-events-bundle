@@ -131,23 +131,8 @@ final class DoctrineEventStore implements EventStore
         return $qb->getQuery()->getResult();
     }
 
-    /*
-     * @return StoredEvent[]|ArrayCollection
-     */
-    /*public function allStoredEventsSince($eventId): ArrayCollection
+    public function refresh(StoredEvent $storedEvent): void
     {
-        $qb = $this->em->createQueryBuilder()
-            ->select('e')
-            ->from(StoredEvent::class, 'e')
-            ->orderBy('e.eventId');
-
-        if ($eventId)
-        {
-            $qb
-                ->where('se.eventId > :event_id')
-                ->setParameter('event_id', $eventId);
-        }
-
-        return $qb->getQuery()->getResult();
-    }*/
+        $this->em->refresh($storedEvent);
+    }
 }
