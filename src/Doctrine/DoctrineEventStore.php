@@ -103,14 +103,11 @@ final class DoctrineEventStore implements EventStore
      */
     public function allUnpublished(): array
     {
-        try
-        {
+        try {
             if (false === $this->em->getConnection()->createSchemaManager()->tablesExist([$this->tableName])) {
                 return []; // Connection does exist, but the events table does not exist.
             }
-        }
-        catch (ConnectionException $connectionException)
-        {
+        } catch (ConnectionException $connectionException) {
             return []; // Connection itself does not exist
         }
 
@@ -131,23 +128,8 @@ final class DoctrineEventStore implements EventStore
         return $qb->getQuery()->getResult();
     }
 
-    /*
-     * @return StoredEvent[]|ArrayCollection
-     */
-    /*public function allStoredEventsSince($eventId): ArrayCollection
+    public function refresh(StoredEvent $storedEvent): void
     {
-        $qb = $this->em->createQueryBuilder()
-            ->select('e')
-            ->from(StoredEvent::class, 'e')
-            ->orderBy('e.eventId');
-
-        if ($eventId)
-        {
-            $qb
-                ->where('se.eventId > :event_id')
-                ->setParameter('event_id', $eventId);
-        }
-
-        return $qb->getQuery()->getResult();
-    }*/
+        $this->em->refresh($storedEvent);
+    }
 }

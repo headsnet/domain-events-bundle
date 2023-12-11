@@ -94,15 +94,24 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
         );
 
         if ($lock->acquire()) {
-            $domainEvent = $this->serializer->deserialize(
-                $storedEvent->getEventBody(),
-                $storedEvent->getTypeName(),
-                'json'
-            );
-            assert($domainEvent instanceof DomainEvent);
+            // Refresh the entity from the database, in case another process has
+            // updated it between reading it above and then acquiring the lock here.
+            // THIS IS CRITICAL TO AVOID DUPLICATE PUBLISHING OF EVENTS
+            $this->eventStore->refresh($storedEvent);
 
-            $this->domainEventDispatcher->dispatch($domainEvent);
-            $this->eventStore->publish($storedEvent);
+            // If the event is definitely still unpublished, whilst we are here holding
+            // the lock, then we can proceed to publish it.
+            if ($storedEvent->getPublishedOn() === null) {
+                $domainEvent = $this->serializer->deserialize(
+                    $storedEvent->getEventBody(),
+                    $storedEvent->getTypeName(),
+                    'json'
+                );
+                assert($domainEvent instanceof DomainEvent);
+
+                $this->domainEventDispatcher->dispatch($domainEvent);
+                $this->eventStore->publish($storedEvent);
+            }
 
             $lock->release();
         }
