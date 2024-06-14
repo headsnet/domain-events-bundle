@@ -12,24 +12,15 @@ declare(strict_types=1);
 
 namespace Headsnet\DomainEventsBundle\Doctrine\EventSubscriber;
 
-use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
-use Doctrine\ORM\Events;
 
-final class TableNameEventSubscriber implements EventSubscriber
+final class TableNameEventSubscriber
 {
     private string $tableName;
 
     public function __construct(string $tableName)
     {
         $this->tableName = $tableName;
-    }
-
-    public function getSubscribedEvents(): array
-    {
-        return [
-            Events::loadClassMetadata,
-        ];
     }
 
     public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs): void

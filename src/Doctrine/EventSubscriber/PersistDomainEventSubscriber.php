@@ -12,31 +12,19 @@ declare(strict_types=1);
 
 namespace Headsnet\DomainEventsBundle\Doctrine\EventSubscriber;
 
-use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\OnFlushEventArgs;
-use Doctrine\ORM\Events;
 use Doctrine\ORM\PersistentCollection;
 use Headsnet\DomainEventsBundle\Domain\Model\ContainsEvents;
 use Headsnet\DomainEventsBundle\Domain\Model\EventStore;
 use Headsnet\DomainEventsBundle\Domain\Model\ReplaceableDomainEvent;
 
-class PersistDomainEventSubscriber implements EventSubscriber
+class PersistDomainEventSubscriber
 {
     private EventStore $eventStore;
 
     public function __construct(EventStore $eventStore)
     {
         $this->eventStore = $eventStore;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getSubscribedEvents(): array
-    {
-        return [
-            Events::onFlush,
-        ];
     }
 
     public function onFlush(OnFlushEventArgs $args): void
