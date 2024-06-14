@@ -46,7 +46,7 @@ class PersistDomainEventSubscriber implements EventSubscriber
 
     private function persistEntityDomainEvents(OnFlushEventArgs $args): void
     {
-        $uow = $args->getEntityManager()->getUnitOfWork();
+        $uow = $args->getObjectManager()->getUnitOfWork();
 
         $sources = [
             $uow->getScheduledEntityInsertions(),
