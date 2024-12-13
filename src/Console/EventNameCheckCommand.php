@@ -7,19 +7,19 @@ namespace Headsnet\DomainEventsBundle\Console;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Headsnet\DomainEventsBundle\Domain\Model\StoredEvent;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(
+    name: 'headsnet:domain-events:name-check',
+    description: 'Check and/or update legacy event class names stored in the database.'
+)]
 final class EventNameCheckCommand extends Command
 {
-    /**
-     * @var string
-     */
-    protected static $defaultDescription = 'Check and/or update legacy event class names stored in the database.';
-
     private EntityManagerInterface $em;
 
     /**
