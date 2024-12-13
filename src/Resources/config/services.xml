@@ -73,7 +73,6 @@
                  class="Headsnet\DomainEventsBundle\Console\EventNameCheckCommand">
             <argument type="service" id="doctrine.orm.default_entity_manager"/>
             <argument>%headsnet_domain_events.legacy_map%</argument>
-            <tag name="console.command" command="headsnet:domain-events:name-check"/>
         </service>
 
     </services>
