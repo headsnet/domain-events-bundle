@@ -14,16 +14,16 @@
     "issues": "https://github.com/headsnet/domain-event-bundle/issues"
   },
   "require": {
-    "php": "^7.4 || ^8.0.2 || ^8.1",
+    "php": "^8.1",
     "doctrine/orm": "^2.5",
-    "doctrine/doctrine-bundle": "^1.0 || ^2.0",
+    "doctrine/doctrine-bundle": "^2.0",
     "ramsey/uuid-doctrine": "^1.5",
-    "symfony/event-dispatcher": "^4.4 || ^5.0 || ^6.0 || ^7.0",
-    "symfony/framework-bundle": "^4.4 || ^5.0 || ^6.0 || ^7.0",
-    "symfony/lock": "^4.4 || ^5.0 || ^6.0 || ^7.0",
-    "symfony/messenger": "^4.4 || ^5.0 || ^6.0 || ^7.0",
-    "symfony/property-access": "^4.4 || ^5.0 || ^6.0 || ^7.0",
-    "symfony/serializer": "^4.4 || ^5.0 || ^6.0 || ^7.0"
+    "symfony/event-dispatcher": "^5.4 || ^6.4 || ^7.0",
+    "symfony/framework-bundle": "^5.4 || ^6.4 || ^7.0",
+    "symfony/lock": "^5.4 || ^6.4 || ^7.0",
+    "symfony/messenger": "^5.4 || ^6.4 || ^7.0",
+    "symfony/property-access": "^5.4 || ^6.4 || ^7.0",
+    "symfony/serializer": "^5.4 || ^6.4 || ^7.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.5",
