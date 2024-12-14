@@ -15,4 +15,6 @@ namespace Headsnet\DomainEventsBundle\Domain\Model;
 interface RecordsEvents
 {
     public function record(DomainEvent $event): void;
+
+    public function recordOnce(DomainEvent $event): void;
 }
