@@ -38,4 +38,13 @@ trait EventRecorderTrait
     {
         $this->messages[] = $message;
     }
+
+    public function recordOnce(DomainEvent $message): void
+    {
+        if (in_array($message, $this->messages, true)) {
+            return;
+        }
+
+        $this->messages[] = $message;
+    }
 }
