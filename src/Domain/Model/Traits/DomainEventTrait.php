@@ -21,7 +21,7 @@ trait DomainEventTrait
      */
     private string $occurredOn;
 
-    private string|null $actorId;
+    private string|null $actorId = null;
 
     public function setActorId(?string $actorId): void
     {
