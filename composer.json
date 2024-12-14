@@ -48,8 +48,8 @@
     "cs": "vendor/bin/ecs check --ansi --config=ecs.php",
     "cs-fix": "vendor/bin/ecs check --ansi --config=ecs.php --fix",
     "static": "vendor/bin/phpstan analyze --ansi",
-    "test": "vendor/bin/simple-phpunit",
-    "test-coverage": "vendor/bin/simple-phpunit --coverage-html tests/_output/coverage"
+    "test": "vendor/bin/phpunit",
+    "test-coverage": "vendor/bin/phpunit --coverage-html tests/_output/coverage"
   },
   "config": {
     "allow-plugins": {
