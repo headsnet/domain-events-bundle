@@ -14,10 +14,7 @@ use Symfony\Contracts\EventDispatcher\Event;
  */
 class PreAppendEvent extends Event
 {
-    /**
-     * @var DomainEvent
-     */
-    protected $domainEvent;
+    protected DomainEvent $domainEvent;
 
     public function __construct(DomainEvent $domainEvent)
     {

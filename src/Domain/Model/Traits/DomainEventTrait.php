@@ -14,22 +14,14 @@ namespace Headsnet\DomainEventsBundle\Domain\Model\Traits;
 
 trait DomainEventTrait
 {
-    /**
-     * @var string
-     */
-    private $aggregateRootId;
+    private string $aggregateRootId;
 
     /**
      * The datetime the event occurred. Please use DomainEvent::MICROSECOND_DATE_FORMAT format.
-     *
-     * @var string
      */
-    private $occurredOn;
+    private string $occurredOn;
 
-    /**
-     * @var string|null
-     */
-    private $actorId;
+    private string|null $actorId;
 
     public function setActorId(?string $actorId): void
     {
