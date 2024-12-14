@@ -41,8 +41,10 @@ trait EventRecorderTrait
 
     public function recordOnce(DomainEvent $message): void
     {
-        if (in_array($message, $this->messages, true)) {
-            return;
+        foreach ($this->messages as $existingMessage) {
+            if ($existingMessage::class === $message::class) {
+                return;
+            }
         }
 
         $this->messages[] = $message;

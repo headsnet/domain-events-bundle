@@ -16,5 +16,8 @@ interface RecordsEvents
 {
     public function record(DomainEvent $event): void;
 
+    /**
+     * This ignores duplicate events, based on the event class-string
+     */
     public function recordOnce(DomainEvent $event): void;
 }
