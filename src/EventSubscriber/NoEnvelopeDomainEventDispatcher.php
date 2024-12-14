@@ -17,10 +17,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class NoEnvelopeDomainEventDispatcher implements DomainEventDispatcher
 {
-    /**
-     * @var MessageBusInterface
-     */
-    private $eventBus;
+    private MessageBusInterface $eventBus;
 
     public function __construct(MessageBusInterface $eventBus)
     {

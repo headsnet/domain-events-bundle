@@ -19,7 +19,7 @@ trait EventRecorderTrait
     /**
      * @var DomainEvent[]
      */
-    private $messages = [];
+    private array $messages = [];
 
     /**
      * @return DomainEvent[]

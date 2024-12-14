@@ -25,25 +25,13 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 final class PublishDomainEventSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var DomainEventDispatcher
-     */
-    private $domainEventDispatcher;
+    private DomainEventDispatcher $domainEventDispatcher;
 
-    /**
-     * @var EventStore
-     */
-    private $eventStore;
+    private EventStore $eventStore;
 
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
+    private SerializerInterface $serializer;
 
-    /**
-     * @var LockFactory
-     */
-    private $lockFactory;
+    private LockFactory $lockFactory;
 
     public function __construct(
         DomainEventDispatcher $domainEventDispatcher,

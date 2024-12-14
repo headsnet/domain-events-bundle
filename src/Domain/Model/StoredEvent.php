@@ -14,35 +14,17 @@ namespace Headsnet\DomainEventsBundle\Domain\Model;
 
 class StoredEvent
 {
-    /**
-     * @var string
-     */
-    private $eventId;
+    private string $eventId;
 
-    /**
-     * @var \DateTimeImmutable
-     */
-    private $occurredOn;
+    private \DateTimeImmutable $occurredOn;
 
-    /**
-     * @var \DateTimeImmutable|null
-     */
-    private $publishedOn;
+    private \DateTimeImmutable|null $publishedOn;
 
-    /**
-     * @var string
-     */
-    private $aggregateRoot;
+    private string $aggregateRoot;
 
-    /**
-     * @var string
-     */
-    private $typeName;
+    private string $typeName;
 
-    /**
-     * @var string
-     */
-    private $eventBody;
+    private string $eventBody;
 
     public function __construct(
         EventId $eventId,
