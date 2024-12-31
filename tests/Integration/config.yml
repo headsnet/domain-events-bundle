@@ -13,7 +13,12 @@ doctrine:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
-
+        mappings:
+            TestFixtures:
+                is_bundle: false
+                type: attribute
+                dir: "%kernel.project_dir%/tests/Integration/Fixtures"
+                prefix: 'Headsnet\DomainEventsBundle\Tests\Integration\Fixtures'
 
 framework:
 
@@ -26,7 +31,6 @@ framework:
                 default_middleware: allow_no_handlers
 
     serializer: ~
-
 
 # Create test aliases for services, so they are not automatically removed from the container.
 services:

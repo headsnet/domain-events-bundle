@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace Headsnet\DomainEventsBundle\Functional;
+namespace Headsnet\DomainEventsBundle\Tests\Functional;
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Headsnet\DomainEventsBundle\Doctrine\DoctrineEventStore;

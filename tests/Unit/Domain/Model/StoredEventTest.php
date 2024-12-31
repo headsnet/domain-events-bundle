@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Headsnet\DomainEventsBundle\Unit\Domain\Model;
+namespace Headsnet\DomainEventsBundle\Tests\Unit\Domain\Model;
 
 use Headsnet\DomainEventsBundle\Domain\Model\EventId;
 use Headsnet\DomainEventsBundle\Domain\Model\StoredEvent;

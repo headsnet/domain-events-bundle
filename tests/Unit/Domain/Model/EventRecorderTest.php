@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Headsnet\DomainEventsBundle\Unit\Domain\Model;
+namespace Headsnet\DomainEventsBundle\Tests\Unit\Domain\Model;
 
 use Headsnet\DomainEventsBundle\Domain\Model\ContainsEvents;
 use Headsnet\DomainEventsBundle\Domain\Model\DomainEvent;
