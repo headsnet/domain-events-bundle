@@ -2,14 +2,11 @@ name: CI
 
 on:
     push:
-        branches: [main]
     pull_request:
-        branches: [main]
 
 jobs:
-
     phpunit:
-        name: PHPUnit with PHP ${{ matrix.php }} and Symfony ${{ matrix.symfony }}
+        name: PHPUnit with PHP ${{ matrix.php }} and Symfony ${{ matrix.symfony }} and Doctrine ${{ matrix.doctrine }}
         runs-on: ${{ matrix.operating-system }}
 
         strategy:
@@ -18,8 +15,11 @@ jobs:
                 operating-system: [ ubuntu-latest, windows-latest ]
                 php: [ '8.1', '8.2', '8.3', '8.4' ]
                 symfony: [ '5.4.*', '6.4.*', '7.2.*' ]
+                doctrine: [ '^2.5', '^3.0' ]
                 exclude:
                     - { php: '8.1', symfony: '7.2.*' }
+                    - { php: '8.1', doctrine: '^3.0' }
+                    - { symfony: '5.4.*', doctrine: '^3.0' }
 
         steps:
             - name: Checkout
@@ -36,18 +36,21 @@ jobs:
               uses: ramsey/composer-install@v3
               env:
                   SYMFONY_REQUIRE: ${{ matrix.symfony }}
+              with:
+                  composer-options: --with=doctrine/orm:${{ matrix.doctrine }}
 
-            - name: Run test suite on PHP ${{ matrix.php }} and Symfony ${{ matrix.symfony }}
+            - name: Run test suite
               run: vendor/bin/phpunit tests
 
     ecs:
         name: Easy Coding Standard
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
             - uses: shivammathur/setup-php@v2
               with:
-                php-version: latest
+                  php-version: latest
+                  coverage: none
             - uses: ramsey/composer-install@v3
             - run: vendor/bin/ecs
 
@@ -55,9 +58,10 @@ jobs:
         name: PHPStan
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
             - uses: shivammathur/setup-php@v2
               with:
                   php-version: latest
+                  coverage: none
             - uses: ramsey/composer-install@v3
             - run: vendor/bin/phpstan
