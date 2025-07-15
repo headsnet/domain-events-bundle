@@ -225,6 +225,16 @@ automatically registered. This allows the StoredEvent entity to persist events
 with microsecond accuracy. This ensures that events are published in the exact
 same order they are recorded.
 
+### Transaction Safety
+
+Events are only published when no database transaction is active. If the
+`kernel.TERMINATE` event fires while a database transaction is still open
+(including nested transactions), event publishing will be deferred until all
+transactions are committed.
+
+This prevents events from being published for data that might be rolled back,
+maintaining the integrity of the outbox pattern.
+
 ### Legacy Events Classes
 
 During refactorings, you may well move or rename event classes. This will

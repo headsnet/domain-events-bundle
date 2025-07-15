@@ -39,6 +39,7 @@
             <argument type="service" id="headsnet_domain_events.repository.event_store_doctrine"/>
             <argument type="service" id="serializer"/>
             <argument type="service" id="headsnet_domain_events.lock_factory_service"/>
+            <argument type="service" id="doctrine.orm.default_entity_manager"/>
             <tag name="kernel.event_subscriber"/>
         </service>
 
