@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace Headsnet\DomainEventsBundle\EventSubscriber;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Headsnet\DomainEventsBundle\Domain\Model\DomainEvent;
 use Headsnet\DomainEventsBundle\Domain\Model\EventStore;
 use Headsnet\DomainEventsBundle\Domain\Model\StoredEvent;
@@ -33,16 +34,20 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
 
     private LockFactory $lockFactory;
 
+    private EntityManagerInterface $entityManager;
+
     public function __construct(
         DomainEventDispatcher $domainEventDispatcher,
         EventStore $eventStore,
         SerializerInterface $serializer,
-        LockFactory $lockFactory
+        LockFactory $lockFactory,
+        EntityManagerInterface $entityManager
     ) {
         $this->domainEventDispatcher = $domainEventDispatcher;
         $this->eventStore = $eventStore;
         $this->serializer = $serializer;
         $this->lockFactory = $lockFactory;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -70,6 +75,11 @@ final class PublishDomainEventSubscriber implements EventSubscriberInterface
 
     private function publishEvents(): void
     {
+        // No publishing of events during an open transaction
+        if ($this->entityManager->getConnection()->isTransactionActive()) {
+            return;
+        }
+
         foreach ($this->eventStore->allUnpublished() as $event) {
             $this->publishEvent($event);
         }
