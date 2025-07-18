@@ -16,7 +16,7 @@ These events are then published using a Symfony event listener in the
 This ensures transactional consistency and guaranteed delivery via the Outbox
 pattern.
 
-_Requires Symfony 4.4 or higher_
+_Requires Symfony 5.4 or higher._
 
 ### Installation
 
