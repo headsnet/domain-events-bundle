@@ -41,6 +41,8 @@ class DomainEventPersistenceTest extends KernelTestCase
     {
         /** @var TestKernel $kernel */
         $kernel = parent::createKernel($options);
+        // Symfony 6.4 loads lazy service proxies from the cache directory of the first kernel in the process
+        $kernel->setClearCacheAfterShutdown(false);
         $kernel->addTestConfig(__DIR__ . '/config.yml');
         $kernel->addTestBundle(FrameworkBundle::class);
         $kernel->addTestBundle(DoctrineBundle::class);
