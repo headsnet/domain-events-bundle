@@ -179,6 +179,36 @@ class DomainEventPersistenceTest extends KernelTestCase
         self::assertEquals($aggregateId, $unpublishedEvents[0]->getAggregateRoot());
     }
 
+    public function testPublishingEachUnpublishedEventSavesItAsPublished(): void
+    {
+        $this->eventStore->append(new TestEvent(Uuid::uuid4()->toString()));
+        $this->eventStore->append(new TestEvent(Uuid::uuid4()->toString()));
+        $this->eventStore->append(new TestEvent(Uuid::uuid4()->toString()));
+        $this->entityManager->flush();
+        $this->entityManager->clear();
+
+        foreach ($this->eventStore->allUnpublished() as $storedEvent) {
+            $this->eventStore->publish($storedEvent);
+        }
+        $this->entityManager->clear();
+
+        self::assertCount(0, $this->eventStore->allUnpublished());
+    }
+
+    public function testChangedStoredEventIsOnlySavedWhenPersistedExplicitly(): void
+    {
+        $this->eventStore->append(new TestEvent(Uuid::uuid4()->toString()));
+        $this->entityManager->flush();
+        $this->entityManager->clear();
+
+        $storedEvent = $this->eventStore->allUnpublished()[0];
+        $storedEvent->setPublishedOn(new \DateTimeImmutable());
+        $this->entityManager->flush();
+        $this->entityManager->clear();
+
+        self::assertCount(1, $this->eventStore->allUnpublished());
+    }
+
     private function isMicrosecondPlatform(AbstractPlatform $platform): bool
     {
         $platformClass = get_class($platform);
